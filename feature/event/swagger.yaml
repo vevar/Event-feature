@@ -1,0 +1,491 @@
+openapi: 3.0.0
+info:
+  description: "Event service"
+  version: "1.0.0"
+  title: "Event service"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "alxminyaev@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+# host: "0.0.0.0"
+# basePath: "/auth"
+
+servers:
+  - url: "http://localhost/event"
+tags:
+  - name: "Event"
+    description: "Разовое мероприятие"
+    externalDocs:
+      description: "Find out more"
+      url: "shorturl.at/bjwU5"
+  - name: "EventKind"
+    description: "Вид мероприятия"
+    externalDocs:
+      description: "Find out more"
+      url: "shorturl.at/bjwU5"
+
+
+paths:
+  /api/v1/event:
+    post:
+      tags:
+        - "Event"
+      summary: "Create event (Not implemented, HIGH Priority)"
+      description: ""
+      operationId: "postEvent"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventPostRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntityIntCreatedResponse"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    get:
+      tags:
+        - "Event"
+      summary: "Get list of  events (Not implemented, HIGH Priority)"
+      description: ""
+      operationId: "getEvents"
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            format: int64
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            format: int32
+          description: The numbers of items to return
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventListResponse"
+
+  /api/v1/event/{id}:
+    get:
+      tags:
+        - "Event"
+      summary: "Get event by id (Not implemented, LOW Priority)"
+      description: ""
+      operationId: "getEventById"
+      parameters:
+        - name: id
+          in: path
+          description: ID of object to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventGetResponse"
+        "404":
+          description: "Not found"
+    delete:
+      tags:
+        - "Event"
+      summary: "Get event by id (Not implemented, MEDIUM Priority)"
+      description: ""
+      operationId: "deleteEventById"
+      parameters:
+        - name: id
+          in: path
+          description: ID of object to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        "404":
+          description: "Not found"
+        "401":
+          description: "Unauthorized"
+    put:
+      tags:
+        - "Event"
+      summary: "Update event (Not implemented, HIGH Priority)"
+      description: ""
+      operationId: "updateEventById"
+      parameters:
+        - name: id
+          in: path
+          description: ID of object to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventPostRequest'
+      responses:
+        '200':
+          description: OK
+        "404":
+          description: "Not found"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/event/{id}/registration:
+    post:
+      tags:
+        - "Event"
+      summary: "User registration in event (Not implemented, HIGH Priority)"
+      description: ""
+      operationId: "postRegistrationEventById"
+      parameters:
+        - name: id
+          in: path
+          description: ID of event
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        "404":
+          description: "Not found"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags:
+        - "Event"
+      summary: "Deleting of user registration in event (Not implemented, HIGH Priority)"
+      description: ""
+      operationId: "deleteRegistrationEventById"
+      parameters:
+        - name: id
+          in: path
+          description: ID of event
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        "404":
+          description: "Not found"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+
+  /api/v1/eventkind:
+    post:
+      tags:
+        - "EventKind"
+      summary: "Create EventKind object (Not implemented, HIGH Priority)"
+      description: ""
+      operationId: "postEventKind"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventKindPostRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntityIntCreatedResponse"
+        "404":
+          description: "Not found"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    get:
+      tags:
+        - "EventKind"
+      summary: "Get list of EventKinds (Not implemented, HIGH Priority)"
+      description: ""
+      operationId: "getEventKinds"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventKindListGetResponse"
+
+
+  /api/v1/eventkind/{id}:
+    delete:
+      tags:
+        - "EventKind"
+      summary: "Event kind by id (Not implemented, MEDIUM Priority)"
+      description: ""
+      operationId: "deleteEventKindById"
+      parameters:
+        - name: id
+          in: path
+          description: ID of event
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        "404":
+          description: "Not found"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    EventPostRequest:
+      type: object
+      required:
+        - name
+        - address
+        - eventKind
+        - status
+      properties:
+        name:
+          type: "string"
+        description:
+          type: "string"
+        address:
+          type: "string"
+        dateStart:
+          type: "string"
+          format: "date-time"
+          description: "UTC"
+        dateEnd:
+          type: "string"
+          format: "date-time"
+          description: "UTC"
+        dateRegistrationEnd:
+          type: "string"
+          format: "date-time"
+          description: "UTC"
+        eventKind:
+          type: integer
+          format: int32
+        maxMembers:
+          type: integer
+          format: int32
+          description: "-1 - not defended value"
+        minMembers:
+          type: integer
+          format: int32
+          description: "-1 - not defended value"
+        status:
+          type: integer
+          format: int32
+        isNeedMemberСonfirmation:
+          type: boolean
+
+
+    EventGetResponse:
+      type: object
+      required:
+        - name
+        - address
+        - eventKind
+        - status
+      properties:
+        id:
+          type: integer
+          format: "int64"
+        name:
+          type: "string"
+        description:
+          type: "string"
+        address:
+          type: "string"
+        dateStart:
+          type: "string"
+          format: "date-time"
+          description: "UTC"
+        dateEnd:
+          type: "string"
+          format: "date-time"
+          description: "UTC"
+        dateRegistrationEnd:
+          type: "string"
+          format: "date-time"
+          description: "UTC"
+        eventKind:
+          type: integer
+          format: int32
+        maxMembers:
+          type: integer
+          format: int32
+          description: "-1 - not defended value"
+        minMembers:
+          type: integer
+          format: int32
+          description: "-1 - not defended value"
+        status:
+          type: integer
+          format: int32
+        isNeedMemberСonfirmation:
+          type: boolean
+    EventListResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventGetResponse"
+
+    EventKindPostRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: "string"
+
+    EventKindGetResponse:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: "string"
+
+    EventKindListGetResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventKindGetResponse"
+
+
+
+    ErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        field:
+          type: "string"
+        message:
+          type: "string"
+
+    EntityIntCreatedResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+    EntityLongCreatedResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

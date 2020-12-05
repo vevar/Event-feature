@@ -1,0 +1,3 @@
+[submodule "Kotlin.Tool"]
+	path = Kotlin.Tool
+	url = git@github.com:vevar/Kotlin.Tool.git
