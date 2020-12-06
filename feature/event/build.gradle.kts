@@ -20,6 +20,12 @@ kotlin {
     }
 
     sourceSets {
+        commonMain{
+            dependencies {
+                implementation(Deps.Common.kotlinDateTime)
+            }
+        }
+
         js().compilations["main"].defaultSourceSet {
             dependencies {
 

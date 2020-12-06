@@ -15,12 +15,12 @@ info:
 servers:
   - url: "http://localhost/event"
 tags:
-  - name: "Event"
+  - name: "OutStudyEvent"
     description: "Разовое мероприятие"
     externalDocs:
       description: "Find out more"
       url: "shorturl.at/bjwU5"
-  - name: "EventKind"
+  - name: "OutStudyEventKind"
     description: "Вид мероприятия"
     externalDocs:
       description: "Find out more"
@@ -28,18 +28,18 @@ tags:
 
 
 paths:
-  /api/v1/event:
+  /api/v1/outstudy-event:
     post:
       tags:
-        - "Event"
-      summary: "Create event (Not implemented, HIGH Priority)"
+        - "OutStudyEvent"
+      summary: "Create outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "postEvent"
+      operationId: "OutStudypostEvent"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EventPostRequest'
+              $ref: '#/components/schemas/OutStudyEventPostRequest'
       responses:
         '200':
           description: OK
@@ -67,10 +67,10 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
     get:
       tags:
-        - "Event"
-      summary: "Get list of  events (Not implemented, HIGH Priority)"
+        - "OutStudyEvent"
+      summary: "Get list of  outstudy-events (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "getEvents"
+      operationId: "OutStudygetEvents"
       parameters:
         - in: query
           name: offset
@@ -90,15 +90,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EventListResponse"
+                $ref: "#/components/schemas/OutStudyEventListResponse"
 
-  /api/v1/event/{id}:
+  /api/v1/outstudy-event/{id}:
     get:
       tags:
-        - "Event"
-      summary: "Get event by id (Not implemented, LOW Priority)"
+        - "OutStudyEvent"
+      summary: "Get outstudy-event by id (Not implemented, LOW Priority)"
       description: ""
-      operationId: "getEventById"
+      operationId: "OutStudygetEventById"
       parameters:
         - name: id
           in: path
@@ -113,15 +113,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EventGetResponse"
+                $ref: "#/components/schemas/OutStudyEventGetResponse"
         "404":
           description: "Not found"
     delete:
       tags:
-        - "Event"
-      summary: "Get event by id (Not implemented, MEDIUM Priority)"
+        - "OutStudyEvent"
+      summary: "Get outstudy-event by id (Not implemented, MEDIUM Priority)"
       description: ""
-      operationId: "deleteEventById"
+      operationId: "OutStudydeleteEventById"
       parameters:
         - name: id
           in: path
@@ -139,10 +139,10 @@ paths:
           description: "Unauthorized"
     put:
       tags:
-        - "Event"
-      summary: "Update event (Not implemented, HIGH Priority)"
+        - "OutStudyEvent"
+      summary: "Update outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "updateEventById"
+      operationId: "OutStudyupdateEventById"
       parameters:
         - name: id
           in: path
@@ -155,7 +155,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EventPostRequest'
+              $ref: '#/components/schemas/OutStudyEventPostRequest'
       responses:
         '200':
           description: OK
@@ -180,17 +180,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/v1/event/{id}/registration:
+  /api/v1/outstudy-event/{id}/registration:
     post:
       tags:
-        - "Event"
-      summary: "User registration in event (Not implemented, HIGH Priority)"
+        - "OutStudyEvent"
+      summary: "User registration in outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "postRegistrationEventById"
+      operationId: "OutStudypostRegistrationEventById"
       parameters:
         - name: id
           in: path
-          description: ID of event
+          description: ID of outstudy-event
           required: true
           schema:
             type: integer
@@ -214,14 +214,14 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
     delete:
       tags:
-        - "Event"
-      summary: "Deleting of user registration in event (Not implemented, HIGH Priority)"
+        - "OutStudyEvent"
+      summary: "Deleting of user registration in outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "deleteRegistrationEventById"
+      operationId: "OutStudydeleteRegistrationEventById"
       parameters:
         - name: id
           in: path
-          description: ID of event
+          description: ID of outstudy-event
           required: true
           schema:
             type: integer
@@ -243,20 +243,93 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-
-
-  /api/v1/eventkind:
+  /api/v1/outstudy-event/{id}/user-confirm:
     post:
       tags:
-        - "EventKind"
-      summary: "Create EventKind object (Not implemented, HIGH Priority)"
+        - "OutStudyEvent"
+      summary: "User confirmation in outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "postEventKind"
+      operationId: "OutStudypostConfirmationByEventId"
+      parameters:
+        - name: id
+          in: path
+          description: ID of outstudy-event
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EventKindPostRequest'
+              $ref: '#/components/schemas/UserKeys'
+      responses:
+        '200':
+          description: OK
+        "404":
+          description: "Not found"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags:
+        - "OutStudyEvent"
+      summary: "Deleting of user confirmation in outstudy-event (Not implemented, HIGH Priority)"
+      description: ""
+      operationId: "OutStudydeleteConfirmationByEventId"
+      parameters:
+        - name: id
+          in: path
+          description: ID of outstudy-event
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserKeys'
+      responses:
+        '200':
+          description: OK
+        "404":
+          description: "Not found"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+
+  /api/v1/outstudy-eventkind:
+    post:
+      tags:
+        - "OutStudyEventKind"
+      summary: "Create OutStudyEventKind object (Not implemented, HIGH Priority)"
+      description: ""
+      operationId: "OutStudypostEventKind"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OutStudyEventKindPostRequest'
       responses:
         '200':
           description: OK
@@ -280,30 +353,30 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
     get:
       tags:
-        - "EventKind"
-      summary: "Get list of EventKinds (Not implemented, HIGH Priority)"
+        - "OutStudyEventKind"
+      summary: "Get list of OutStudyEventKinds (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "getEventKinds"
+      operationId: "OutStudygetEventKinds"
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EventKindListGetResponse"
+                $ref: "#/components/schemas/OutStudyEventKindListGetResponse"
 
 
-  /api/v1/eventkind/{id}:
+  /api/v1/outstudy-eventkind/{id}:
     delete:
       tags:
-        - "EventKind"
-      summary: "Event kind by id (Not implemented, MEDIUM Priority)"
+        - "OutStudyEventKind"
+      summary: "OutStudyEvent kind by id (Not implemented, MEDIUM Priority)"
       description: ""
-      operationId: "deleteEventKindById"
+      operationId: "OutStudydeleteEventKindById"
       parameters:
         - name: id
           in: path
-          description: ID of event
+          description: ID of outstudy-event
           required: true
           schema:
             type: integer
@@ -328,12 +401,12 @@ paths:
 
 components:
   schemas:
-    EventPostRequest:
+    OutStudyEventPostRequest:
       type: object
       required:
         - name
         - address
-        - eventKind
+        - outstudyEventKind
         - status
       properties:
         name:
@@ -354,7 +427,7 @@ components:
           type: "string"
           format: "date-time"
           description: "UTC"
-        eventKind:
+        outstudyEventKind:
           type: integer
           format: int32
         maxMembers:
@@ -368,16 +441,17 @@ components:
         status:
           type: integer
           format: int32
-        isNeedMemberСonfirmation:
+        isNeedMemberConfirmation:
           type: boolean
 
 
-    EventGetResponse:
+    OutStudyEventGetResponse:
       type: object
       required:
+        - id
         - name
         - address
-        - eventKind
+        - outstudyEventKind
         - status
       properties:
         id:
@@ -401,7 +475,7 @@ components:
           type: "string"
           format: "date-time"
           description: "UTC"
-        eventKind:
+        outstudyEventKind:
           type: integer
           format: int32
         maxMembers:
@@ -415,9 +489,9 @@ components:
         status:
           type: integer
           format: int32
-        isNeedMemberСonfirmation:
+        isNeedMemberConfirmation:
           type: boolean
-    EventListResponse:
+    OutStudyEventListResponse:
       type: object
       required:
         - data
@@ -425,9 +499,9 @@ components:
         data:
           type: array
           items:
-            $ref: "#/components/schemas/EventGetResponse"
+            $ref: "#/components/schemas/OutStudyEventGetResponse"
 
-    EventKindPostRequest:
+    OutStudyEventKindPostRequest:
       type: object
       required:
         - name
@@ -435,7 +509,7 @@ components:
         name:
           type: "string"
 
-    EventKindGetResponse:
+    OutStudyEventKindGetResponse:
       type: object
       required:
         - id
@@ -447,7 +521,7 @@ components:
         name:
           type: "string"
 
-    EventKindListGetResponse:
+    OutStudyEventKindListGetResponse:
       type: object
       required:
         - data
@@ -455,9 +529,20 @@ components:
         data:
           type: array
           items:
-            $ref: "#/components/schemas/EventKindGetResponse"
+            $ref: "#/components/schemas/OutStudyEventKindGetResponse"
 
-
+    UserKeys:
+      type: object
+      required:
+        - id
+        - type
+      properties:
+        id:
+          type: integer
+          format: int64
+        type:
+          type: integer
+          format: int32
 
     ErrorResponse:
       type: object
