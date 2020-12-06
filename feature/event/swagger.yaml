@@ -34,7 +34,7 @@ paths:
         - "OutStudyEvent"
       summary: "Create outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "OutStudypostEvent"
+      operationId: "postOutStudyEvent"
       requestBody:
         content:
           application/json:
@@ -70,7 +70,7 @@ paths:
         - "OutStudyEvent"
       summary: "Get list of  outstudy-events (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "OutStudygetEvents"
+      operationId: "getOutStudyEvents"
       parameters:
         - in: query
           name: offset
@@ -98,7 +98,7 @@ paths:
         - "OutStudyEvent"
       summary: "Get outstudy-event by id (Not implemented, LOW Priority)"
       description: ""
-      operationId: "OutStudygetEventById"
+      operationId: "getByOutStudyEventId"
       parameters:
         - name: id
           in: path
@@ -121,7 +121,7 @@ paths:
         - "OutStudyEvent"
       summary: "Get outstudy-event by id (Not implemented, MEDIUM Priority)"
       description: ""
-      operationId: "OutStudydeleteEventById"
+      operationId: "deleteEventByOutStudyEventId"
       parameters:
         - name: id
           in: path
@@ -142,7 +142,7 @@ paths:
         - "OutStudyEvent"
       summary: "Update outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "OutStudyupdateEventById"
+      operationId: "updateByOutStudyEventId"
       parameters:
         - name: id
           in: path
@@ -186,7 +186,7 @@ paths:
         - "OutStudyEvent"
       summary: "User registration in outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "OutStudypostRegistrationEventById"
+      operationId: "postRegistrationByOutStudyEventId"
       parameters:
         - name: id
           in: path
@@ -217,7 +217,7 @@ paths:
         - "OutStudyEvent"
       summary: "Deleting of user registration in outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "OutStudydeleteRegistrationEventById"
+      operationId: "deleteRegistrationByOutStudyEventId"
       parameters:
         - name: id
           in: path
@@ -249,7 +249,7 @@ paths:
         - "OutStudyEvent"
       summary: "User confirmation in outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "OutStudypostConfirmationByEventId"
+      operationId: "postConfirmationByOutStudyEventId"
       parameters:
         - name: id
           in: path
@@ -285,7 +285,7 @@ paths:
         - "OutStudyEvent"
       summary: "Deleting of user confirmation in outstudy-event (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "OutStudydeleteConfirmationByEventId"
+      operationId: "deleteConfirmationByOutStudyEventId"
       parameters:
         - name: id
           in: path
@@ -324,7 +324,7 @@ paths:
         - "OutStudyEventKind"
       summary: "Create OutStudyEventKind object (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "OutStudypostEventKind"
+      operationId: "postOutStudyEventKind"
       requestBody:
         content:
           application/json:
@@ -356,7 +356,7 @@ paths:
         - "OutStudyEventKind"
       summary: "Get list of OutStudyEventKinds (Not implemented, HIGH Priority)"
       description: ""
-      operationId: "OutStudygetEventKinds"
+      operationId: "getOutStudyEventKinds"
       responses:
         '200':
           description: OK
@@ -372,7 +372,7 @@ paths:
         - "OutStudyEventKind"
       summary: "OutStudyEvent kind by id (Not implemented, MEDIUM Priority)"
       description: ""
-      operationId: "OutStudydeleteEventKindById"
+      operationId: "deleteByOutStudyEventKindId"
       parameters:
         - name: id
           in: path
