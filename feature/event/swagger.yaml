@@ -518,7 +518,7 @@ components:
         isConfirmed:
           type: boolean
         organizer:
-          $ref: "#/components/schemas/UserResponse"
+          $ref: "#/components/schemas/OrganizerResponse"
 
     OutStudyEventGetResponseWithMembers:
       type: object
@@ -573,15 +573,12 @@ components:
     UserKeys:
       type: object
       required:
-        - id
-        - type
+        - userId
       properties:
-        id:
+        userId:
           type: integer
           format: int64
-        type:
-          type: integer
-          format: int32
+          description: "User id"
 
     ErrorResponse:
       type: object
@@ -610,37 +607,36 @@ components:
           type: "integer"
           format: "int32"
 
-    UserResponse:
+    OrganizerResponse:
       type: object
       required:
-        - id
-        - type
+        - user
       properties:
-        id:
-          type: "integer"
-          format: "int64"
-        type:
-          type: "integer"
-          format: "int32"
-        profile:
-          $ref: "#/components/schemas/Profile"
+        user:
+          $ref: '#/components/schemas/User'
 
     MemberResponse:
       type: object
       required:
-        - id
-        - type
+        - user
       properties:
-        id:
-          type: "integer"
-          format: "int64"
-        type:
-          type: "integer"
-          format: "int32"
+        user:
+          $ref: '#/components/schemas/User'
         isConfirmed:
           type: "boolean"
+
+    User:
+      type: object
+      required:
+        - id
+        - profile
+      properties:
+        id:
+          type: integer
+          format: int64
         profile:
-          $ref: "#/components/schemas/Profile"
+          $ref: '#/components/schemas/Profile'
+
 
     Profile:
       type: object
