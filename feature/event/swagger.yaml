@@ -629,11 +629,16 @@ components:
       type: object
       required:
         - id
+        - roles
         - profile
       properties:
         id:
           type: integer
           format: int64
+        roles:
+          type: array
+          items:
+            type: integer
         profile:
           $ref: '#/components/schemas/Profile'
 
