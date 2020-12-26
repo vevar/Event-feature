@@ -11,6 +11,7 @@
 */
 package dev.alxminyaev.feature.event.api
 
+import dev.alxminyaev.feature.event.api.models.UserKeys
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 
@@ -22,7 +23,7 @@ object Paths {
      * @param userKeys  (optional)
      */
     @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-event/{id}/user-confirm") class outStudydeleteConfirmationByEventId(val id: kotlin.Long, val userKeys: UserKeys? = null)
+    @Location("/api/v1/outstudy-event/{id}/user-confirm") class deleteConfirmationByOutStudyEventId(val id: kotlin.Long, val userKeys: UserKeys? = null)
 
     /**
      * Get outstudy-event by id (Not implemented, MEDIUM Priority)
@@ -30,7 +31,7 @@ object Paths {
      * @param id ID of object to delete 
      */
     @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-event/{id}") class outStudydeleteEventById(val id: kotlin.Long)
+    @Location("/api/v1/outstudy-event/{id}") class deleteEventByOutStudyEventId(val id: kotlin.Long)
 
     /**
      * Deleting of user registration in outstudy-event (Not implemented, HIGH Priority)
@@ -38,7 +39,7 @@ object Paths {
      * @param id ID of outstudy-event 
      */
     @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-event/{id}/registration") class outStudydeleteRegistrationEventById(val id: kotlin.Long)
+    @Location("/api/v1/outstudy-event/{id}/registration") class deleteRegistrationByOutStudyEventId(val id: kotlin.Long)
 
     /**
      * Get outstudy-event by id (Not implemented, LOW Priority)
@@ -46,16 +47,20 @@ object Paths {
      * @param id ID of object to return 
      */
     @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-event/{id}") class outStudygetEventById(val id: kotlin.Long)
+    @Location("/api/v1/outstudy-event/{id}") class getByOutStudyEventId(val id: kotlin.Long)
 
     /**
      * Get list of  outstudy-events (Not implemented, HIGH Priority)
      * 
-     * @param offset The number of items to skip before starting to collect the result set (optional)
-     * @param limit The numbers of items to return (optional)
+     * @param offset The number of items to skip before starting to collect the result set 
+     * @param limit The numbers of items to return 
+     * @param dateStart  (optional)
+     * @param dateEnd  (optional)
+     * @param status  (optional)
+     * @param isConfirmed  (optional)
      */
     @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-event") class outStudygetEvents(val offset: kotlin.Long? = null, val limit: kotlin.Int? = null)
+    @Location("/api/v1/outstudy-event") class getOutStudyEvents(val offset: kotlin.Long, val limit: kotlin.Int, val dateStart: java.time.LocalDateTime? = null, val dateEnd: java.time.LocalDateTime? = null, val status: kotlin.Long? = null, val isConfirmed: kotlin.Boolean? = null)
 
     /**
      * OutStudyEvent kind by id (Not implemented, MEDIUM Priority)
@@ -63,13 +68,13 @@ object Paths {
      * @param id ID of outstudy-event 
      */
     @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-eventkind/{id}") class outStudydeleteEventKindById(val id: kotlin.Long)
+    @Location("/api/v1/outstudy-eventkind/{id}") class deleteByOutStudyEventKindId(val id: kotlin.Long)
 
     /**
      * Get list of OutStudyEventKinds (Not implemented, HIGH Priority)
      * 
      */
     @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-eventkind") class outStudygetEventKinds()
+    @Location("/api/v1/outstudy-eventkind") class getOutStudyEventKinds()
 
 }

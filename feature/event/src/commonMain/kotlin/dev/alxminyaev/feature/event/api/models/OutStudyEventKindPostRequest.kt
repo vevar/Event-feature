@@ -11,12 +11,15 @@
 */
 package dev.alxminyaev.feature.event.api.models
 
+import dev.alxminyaev.feature.event.api.models.OutStudyEventCriterionPostRequest
 
 /**
  * 
- * @param id 
+ * @param name 
+ * @param criteria 
  */
-data class EntityIntCreatedResponse (
-    val id: kotlin.Long
+data class OutStudyEventKindPostRequest (
+    val name: kotlin.String,
+    val criteria: kotlin.Array<OutStudyEventCriterionPostRequest>? = null
 ) 
 

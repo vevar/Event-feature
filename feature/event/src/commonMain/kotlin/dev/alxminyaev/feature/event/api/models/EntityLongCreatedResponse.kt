@@ -15,10 +15,8 @@ package dev.alxminyaev.feature.event.api.models
 /**
  * 
  * @param id 
- * @param name 
  */
-data class OutStudyEventKindGetResponse (
-    val id: kotlin.Int,
-    val name: kotlin.String
+data class EntityLongCreatedResponse (
+    val id: kotlin.Long
 ) 
 

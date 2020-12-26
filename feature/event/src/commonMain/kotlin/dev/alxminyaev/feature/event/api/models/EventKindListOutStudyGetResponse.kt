@@ -11,12 +11,13 @@
 */
 package dev.alxminyaev.feature.event.api.models
 
+import dev.alxminyaev.feature.event.api.models.EventKindOutStudyGetResponse
 
 /**
  * 
- * @param name 
+ * @param data 
  */
-data class OutStudyEventKindPostRequest (
-    val name: kotlin.String
+data class EventKindListOutStudyGetResponse (
+    val data: kotlin.Array<EventKindOutStudyGetResponse>
 ) 
 

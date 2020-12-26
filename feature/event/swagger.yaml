@@ -13,6 +13,7 @@ info:
 # basePath: "/auth"
 
 servers:
+  - url: "http://5.130.14.37:8080/event"
   - url: "http://localhost/event"
 tags:
   - name: "OutStudyEvent"
@@ -318,11 +319,6 @@ paths:
           schema:
             type: integer
             format: int64
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserKeys'
       responses:
         '200':
           description: OK
@@ -346,7 +342,7 @@ paths:
     post:
       tags:
         - "OutStudyEventKind"
-      summary: "Create OutStudyEventKind object (Not implemented, HIGH Priority)"
+      summary: "Create OutStudyEventKind object"
       description: ""
       operationId: "postOutStudyEventKind"
       requestBody:
@@ -378,7 +374,7 @@ paths:
     get:
       tags:
         - "OutStudyEventKind"
-      summary: "Get list of OutStudyEventKinds (Not implemented, HIGH Priority)"
+      summary: "Get list of OutStudyEventKinds"
       description: ""
       operationId: "getOutStudyEventKinds"
       responses:
@@ -387,7 +383,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OutStudyEventKindListGetResponse"
+                $ref: "#/components/schemas/EventKindListOutStudyGetResponse"
 
 
   /api/v1/outstudy-eventkind/{id}:
@@ -430,7 +426,7 @@ components:
       required:
         - name
         - address
-        - outstudyEventKind
+        - outstudyEventKindId
         - status
       properties:
         name:
@@ -451,7 +447,7 @@ components:
           type: "string"
           format: "date-time"
           description: "UTC"
-        outstudyEventKind:
+        outstudyEventKindId:
           type: integer
           format: int32
         maxMembers:
@@ -547,20 +543,29 @@ components:
       properties:
         name:
           type: "string"
+        criteria:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutStudyEventCriterionPostRequest'
 
-    OutStudyEventKindGetResponse:
+    EventKindOutStudyGetResponse:
       type: object
       required:
         - id
         - name
+        - criteria
       properties:
         id:
           type: integer
           format: int32
         name:
           type: "string"
+        criteria:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutStudyEventCriteria'
 
-    OutStudyEventKindListGetResponse:
+    EventKindListOutStudyGetResponse:
       type: object
       required:
         - data
@@ -568,8 +573,55 @@ components:
         data:
           type: array
           items:
-            $ref: "#/components/schemas/OutStudyEventKindGetResponse"
+            $ref: "#/components/schemas/EventKindOutStudyGetResponse"
 
+    OutStudyEventCriteria:
+      required:
+        - id
+        - name
+        - value
+        - typeId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        value:
+          type: integer
+          format: int32
+        typeId:
+          type: integer
+          format: int32
+          description: "1: ALL, 2: BY_RATING_PLACE, 3: CUSTOM"
+        bottomPlace:
+          type: integer
+          format: int32
+        topPlace:
+          type: integer
+          format: int32
+    OutStudyEventCriterionPostRequest:
+      required:
+        - value
+        - typeId
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: integer
+          format: int32
+        typeId:
+          type: integer
+          format: int32
+          description: "1: ALL, 2: BY_RATING_PLACE, 3: CUSTOM"
+        bottomPlace:
+          type: integer
+          format: int32
+        topPlace:
+          type: integer
+          format: int32
     UserKeys:
       type: object
       required:
@@ -597,7 +649,7 @@ components:
       properties:
         id:
           type: "integer"
-          format: "int64"
+          format: "int32"
     EntityLongCreatedResponse:
       type: object
       required:
@@ -605,7 +657,7 @@ components:
       properties:
         id:
           type: "integer"
-          format: "int32"
+          format: "int64"
 
     OrganizerResponse:
       type: object

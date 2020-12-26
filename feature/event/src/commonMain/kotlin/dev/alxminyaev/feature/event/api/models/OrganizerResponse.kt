@@ -11,14 +11,13 @@
 */
 package dev.alxminyaev.feature.event.api.models
 
+import dev.alxminyaev.feature.event.api.models.User
 
 /**
  * 
- * @param id 
- * @param type 
+ * @param user 
  */
-data class UserKeys (
-    val id: kotlin.Long,
-    val type: kotlin.Int
+data class OrganizerResponse (
+    val user: User
 ) 
 

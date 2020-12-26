@@ -16,7 +16,7 @@ package dev.alxminyaev.feature.event.api.models
  * 
  * @param name 
  * @param address 
- * @param outstudyEventKind 
+ * @param outstudyEventKindId 
  * @param status 
  * @param description 
  * @param dateStart UTC
@@ -29,7 +29,7 @@ package dev.alxminyaev.feature.event.api.models
 data class OutStudyEventPostRequest (
     val name: kotlin.String,
     val address: kotlin.String,
-    val outstudyEventKind: kotlin.Int,
+    val outstudyEventKindId: kotlin.Int,
     val status: kotlin.Int,
     val description: kotlin.String? = null,
     /* UTC */

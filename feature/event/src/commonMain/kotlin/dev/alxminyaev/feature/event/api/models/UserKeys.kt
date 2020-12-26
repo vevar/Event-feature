@@ -14,9 +14,10 @@ package dev.alxminyaev.feature.event.api.models
 
 /**
  * 
- * @param id 
+ * @param userId User id
  */
-data class EntityLongCreatedResponse (
-    val id: kotlin.Int
+data class UserKeys (
+    /* User id */
+    val userId: kotlin.Long
 ) 
 
