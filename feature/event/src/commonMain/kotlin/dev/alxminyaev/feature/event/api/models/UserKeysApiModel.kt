@@ -14,13 +14,10 @@ package dev.alxminyaev.feature.event.api.models
 
 /**
  * 
- * @param firstName 
- * @param lastName 
- * @param middleName 
+ * @param userId User id
  */
-data class Profile (
-    val firstName: kotlin.String,
-    val lastName: kotlin.String,
-    val middleName: kotlin.String? = null
+data class UserKeysApiModel (
+    /* User id */
+    val userId: kotlin.Long
 ) 
 

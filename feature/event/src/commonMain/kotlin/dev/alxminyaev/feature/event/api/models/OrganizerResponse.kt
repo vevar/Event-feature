@@ -11,13 +11,13 @@
 */
 package dev.alxminyaev.feature.event.api.models
 
-import dev.alxminyaev.feature.event.api.models.User
+import dev.alxminyaev.feature.event.api.models.UserApiEntity
 
 /**
  * 
  * @param user 
  */
 data class OrganizerResponse (
-    val user: User
+    val user: UserApiEntity
 ) 
 

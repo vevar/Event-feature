@@ -16,11 +16,11 @@ package dev.alxminyaev.feature.event.api.models
  * 
  * @param name 
  * @param address 
+ * @param dateStart UTC
+ * @param dateEnd UTC
  * @param outstudyEventKindId 
  * @param status 
  * @param description 
- * @param dateStart UTC
- * @param dateEnd UTC
  * @param dateRegistrationEnd UTC
  * @param maxMembers -1 - not defended value
  * @param minMembers -1 - not defended value
@@ -29,15 +29,15 @@ package dev.alxminyaev.feature.event.api.models
 data class OutStudyEventPostRequest (
     val name: kotlin.String,
     val address: kotlin.String,
+    /* UTC */
+    val dateStart: kotlin.String,
+    /* UTC */
+    val dateEnd: kotlin.String,
     val outstudyEventKindId: kotlin.Int,
     val status: kotlin.Int,
     val description: kotlin.String? = null,
     /* UTC */
-    val dateStart: java.time.LocalDateTime? = null,
-    /* UTC */
-    val dateEnd: java.time.LocalDateTime? = null,
-    /* UTC */
-    val dateRegistrationEnd: java.time.LocalDateTime? = null,
+    val dateRegistrationEnd: kotlin.String? = null,
     /* -1 - not defended value */
     val maxMembers: kotlin.Int? = null,
     /* -1 - not defended value */

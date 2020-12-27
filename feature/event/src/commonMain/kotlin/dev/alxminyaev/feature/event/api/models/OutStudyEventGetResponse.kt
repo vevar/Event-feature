@@ -18,14 +18,14 @@ import dev.alxminyaev.feature.event.api.models.OrganizerResponse
  * @param id 
  * @param name 
  * @param address 
- * @param outstudyEventKind 
+ * @param dateStart UTC
+ * @param dateEnd UTC
  * @param status 
  * @param isNeedMemberConfirmation 
  * @param organizer 
  * @param description 
- * @param dateStart UTC
- * @param dateEnd UTC
  * @param dateRegistrationEnd UTC
+ * @param eventKindId 
  * @param maxMembers 
  * @param minMembers 
  * @param isConfirmed 
@@ -34,17 +34,17 @@ data class OutStudyEventGetResponse (
     val id: kotlin.Long,
     val name: kotlin.String,
     val address: kotlin.String,
-    val outstudyEventKind: kotlin.Int,
+    /* UTC */
+    val dateStart: kotlin.String,
+    /* UTC */
+    val dateEnd: kotlin.String,
     val status: kotlin.Int,
     val isNeedMemberConfirmation: kotlin.Boolean,
     val organizer: OrganizerResponse,
     val description: kotlin.String? = null,
     /* UTC */
-    val dateStart: java.time.LocalDateTime? = null,
-    /* UTC */
-    val dateEnd: java.time.LocalDateTime? = null,
-    /* UTC */
-    val dateRegistrationEnd: java.time.LocalDateTime? = null,
+    val dateRegistrationEnd: kotlin.String? = null,
+    val eventKindId: kotlin.Int? = null,
     val maxMembers: kotlin.Int? = null,
     val minMembers: kotlin.Int? = null,
     val isConfirmed: kotlin.Boolean? = null

@@ -11,7 +11,6 @@
 */
 package dev.alxminyaev.feature.event.api
 
-import dev.alxminyaev.feature.event.api.models.UserKeys
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 
@@ -23,7 +22,7 @@ object Paths {
      * @param userKeys  (optional)
      */
     @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-event/{id}/user-confirm") class deleteConfirmationByOutStudyEventId(val id: kotlin.Long, val userKeys: UserKeys? = null)
+    @Location("/api/v1/outstudy-event/{id}/user-confirm") class deleteConfirmationByOutStudyEventId(val id: kotlin.Long)
 
     /**
      * Get outstudy-event by id (Not implemented, MEDIUM Priority)

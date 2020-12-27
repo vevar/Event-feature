@@ -80,7 +80,7 @@ fun OutStudyEventCriterionPostRequest.toDomain(): CriterionOutStudy {
                 "Укажите корректный диапазон, например c 1 по 10"
             )
         )
-        CriterionType.CUSTOM.id -> CriterionOutStudy.All(
+        CriterionType.CUSTOM.id -> CriterionOutStudy.Custom(
             id = 0,
             name = name ?: throw ValidationDataException("name", "Название не должно быть пустым"),
             value = value,

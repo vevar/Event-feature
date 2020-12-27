@@ -287,7 +287,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserKeys'
+              $ref: '#/components/schemas/UserKeysApiModel'
       responses:
         '200':
           description: OK
@@ -428,6 +428,8 @@ components:
         - address
         - outstudyEventKindId
         - status
+        - dateStart
+        - dateEnd
       properties:
         name:
           type: "string"
@@ -437,16 +439,16 @@ components:
           type: "string"
         dateStart:
           type: "string"
-          format: "date-time"
           description: "UTC"
+          example: "2020-12-27T08:40:07.914Z"
         dateEnd:
           type: "string"
-          format: "date-time"
           description: "UTC"
+          example: "2020-12-27T08:40:07.914Z"
         dateRegistrationEnd:
           type: "string"
-          format: "date-time"
           description: "UTC"
+          example: "2020-12-27T08:40:07.914Z"
         outstudyEventKindId:
           type: integer
           format: int32
@@ -475,6 +477,8 @@ components:
         - status
         - isNeedMemberConfirmation
         - organizer
+        - dateStart
+        - dateEnd
       properties:
         id:
           type: integer
@@ -487,17 +491,17 @@ components:
           type: "string"
         dateStart:
           type: "string"
-          format: "date-time"
           description: "UTC"
+          example: "2020-12-27T08:40:07.914Z"
         dateEnd:
           type: "string"
-          format: "date-time"
           description: "UTC"
+          example: "2020-12-27T08:40:07.914Z"
         dateRegistrationEnd:
           type: "string"
-          format: "date-time"
           description: "UTC"
-        outstudyEventKind:
+          example: "2020-12-27T08:40:07.914Z"
+        eventKindId:
           type: integer
           format: int32
         maxMembers:
@@ -529,8 +533,12 @@ components:
     OutStudyEventListResponse:
       type: object
       required:
+        - size
         - data
       properties:
+        size:
+          type: integer
+          format: int64
         data:
           type: array
           items:
@@ -622,7 +630,7 @@ components:
         topPlace:
           type: integer
           format: int32
-    UserKeys:
+    UserKeysApiModel:
       type: object
       required:
         - userId
@@ -665,7 +673,7 @@ components:
         - user
       properties:
         user:
-          $ref: '#/components/schemas/User'
+          $ref: '#/components/schemas/UserApiEntity'
 
     MemberResponse:
       type: object
@@ -673,11 +681,11 @@ components:
         - user
       properties:
         user:
-          $ref: '#/components/schemas/User'
+          $ref: '#/components/schemas/UserApiEntity'
         isConfirmed:
           type: "boolean"
 
-    User:
+    UserApiEntity:
       type: object
       required:
         - id
@@ -692,10 +700,10 @@ components:
           items:
             type: integer
         profile:
-          $ref: '#/components/schemas/Profile'
+          $ref: '#/components/schemas/ProfileApiModel'
 
 
-    Profile:
+    ProfileApiModel:
       type: object
       required:
         - firstName

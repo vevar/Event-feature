@@ -15,9 +15,11 @@ import dev.alxminyaev.feature.event.api.models.OutStudyEventGetResponse
 
 /**
  * 
+ * @param size 
  * @param data 
  */
 data class OutStudyEventListResponse (
+    val size: kotlin.Long,
     val data: kotlin.Array<OutStudyEventGetResponse>
 ) 
 

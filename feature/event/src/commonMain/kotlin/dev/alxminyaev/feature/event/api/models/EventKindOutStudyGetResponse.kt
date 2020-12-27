@@ -22,6 +22,6 @@ import dev.alxminyaev.feature.event.api.models.OutStudyEventCriteria
 data class EventKindOutStudyGetResponse (
     val id: kotlin.Int,
     val name: kotlin.String,
-    val criteria: kotlin.Array<OutStudyEventCriteria>? = null
+    val criteria: kotlin.Array<OutStudyEventCriteria>
 ) 
 

@@ -1,13 +1,13 @@
 package dev.alxminyaev.feature.event.model
 
-import kotlinx.datetime.LocalDateTime
+import com.soywiz.klock.DateTimeTz
 
 data class StudyEvent(
     override val id: Long,
     override val name: String,
     override val address: String,
     override val description: String?,
-    override val dateStart: LocalDateTime,
-    override val dateEnd: LocalDateTime
+    override val dateStart: DateTimeTz,
+    override val dateEnd: DateTimeTz
 ) : Event() {
 }

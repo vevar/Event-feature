@@ -11,7 +11,7 @@
 */
 package dev.alxminyaev.feature.event.api.models
 
-import dev.alxminyaev.feature.event.api.models.User
+import dev.alxminyaev.feature.event.api.models.UserApiEntity
 
 /**
  * 
@@ -19,7 +19,7 @@ import dev.alxminyaev.feature.event.api.models.User
  * @param isConfirmed 
  */
 data class MemberResponse (
-    val user: User,
+    val user: UserApiEntity,
     val isConfirmed: kotlin.Boolean? = null
 ) 
 

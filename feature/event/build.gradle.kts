@@ -20,7 +20,7 @@ kotlin {
     }
 
     sourceSets {
-        commonMain{
+        commonMain {
             dependencies {
                 implementation(Deps.Common.kotlinDateTime)
             }
@@ -83,12 +83,15 @@ dependencies {
         mppLibrary(Deps.Multiplatform.coroutines)
         mppLibrary(Deps.Multiplatform.kodein)
         mppLibrary(Deps.Multiplatform.kodeinConf)
+        mppLibrary(Deps.Multiplatform.klock)
 
         mppLibrary(Deps.Multiplatform.ktorSerialization)
         mppLibrary(Deps.Multiplatform.kotlinSerialization)
         mppLibrary(Deps.Multiplatform.kotlinSerializationRuntime)
 
         mppModule(Modules.Tool.Mpp.errorHandling)
+        mppModule(Modules.Tool.Mpp.domain)
+
 
     }
 }

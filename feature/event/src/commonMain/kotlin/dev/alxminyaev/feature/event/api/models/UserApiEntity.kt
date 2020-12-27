@@ -11,7 +11,7 @@
 */
 package dev.alxminyaev.feature.event.api.models
 
-import dev.alxminyaev.feature.event.api.models.Profile
+import dev.alxminyaev.feature.event.api.models.ProfileApiModel
 
 /**
  * 
@@ -19,9 +19,9 @@ import dev.alxminyaev.feature.event.api.models.Profile
  * @param roles 
  * @param profile 
  */
-data class User (
+data class UserApiEntity (
     val id: kotlin.Long,
     val roles: kotlin.Array<kotlin.Int>,
-    val profile: Profile
+    val profile: ProfileApiModel
 ) 
 
