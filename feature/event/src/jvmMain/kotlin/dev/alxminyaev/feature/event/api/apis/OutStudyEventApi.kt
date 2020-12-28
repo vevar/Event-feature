@@ -17,6 +17,7 @@ import com.alxminyaev.tool.error.exceptions.UnauthorizedException
 import com.google.gson.Gson
 import dev.alxminyaev.feature.event.DataLimit
 import dev.alxminyaev.feature.event.api.Paths
+import dev.alxminyaev.feature.event.api.models.EntityLongCreatedResponse
 import dev.alxminyaev.feature.event.api.models.OutStudyEventListResponse
 import dev.alxminyaev.feature.event.api.models.OutStudyEventPostRequest
 import dev.alxminyaev.feature.event.model.toApi
@@ -138,9 +139,10 @@ fun Route.OutStudyEventApi() {
     route("/api/v1/outstudy-event") {
         post {
             val obj = call.receive<OutStudyEventPostRequest>()
-            val user = call.principal<User>() ?: throw UnauthorizedException()
+//            val user = call.principal<User>() ?: throw UnauthorizedException() TODO replace hardcode
             val useCase by di().instance<CreateNewOutStudyEventUseCase>()
-            useCase.invoke(obj.toDomain(organizer = EntityRef(user.id)))
+            val eventId = useCase.invoke(obj.toDomain(organizer = EntityRef(2)))
+            call.respond(EntityLongCreatedResponse(eventId))
         }
     }
 

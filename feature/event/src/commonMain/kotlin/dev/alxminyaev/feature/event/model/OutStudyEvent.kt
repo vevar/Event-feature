@@ -1,8 +1,10 @@
 package dev.alxminyaev.feature.event.model
 
 import com.alxminyaev.tool.domain.model.EntityRef
+import com.soywiz.klock.DateFormat
 import com.soywiz.klock.DateTime
 import com.soywiz.klock.DateTimeTz
+import com.soywiz.klock.parse
 import dev.alxminyaev.feature.event.api.models.OrganizerResponse
 import dev.alxminyaev.feature.event.api.models.OutStudyEventGetResponse
 import dev.alxminyaev.feature.event.api.models.OutStudyEventPostRequest
@@ -54,14 +56,15 @@ data class OutStudyEvent(
 }
 
 fun OutStudyEventPostRequest.toDomain(organizer: EntityRef<Long, User>): OutStudyEvent {
+    val dateFormatter = DateFormat.invoke("yyyy-MM-dd'T'HH:mm")
     return OutStudyEvent(
         id = 0,
         name = name,
         address = address,
         description = description,
-        dateStart = dateStart.let { DateTime.parse(it) },
-        dateEnd = dateEnd.let { DateTime.parse(it) },
-        dateRegistrationEnd = dateRegistrationEnd?.let { DateTime.parse(it) },
+        dateStart = dateStart.let { dateFormatter.parse(it) },
+        dateEnd = dateEnd.let { dateFormatter.parse(it) },
+        dateRegistrationEnd = dateRegistrationEnd?.let { dateFormatter.parse(it) },
         maxMembers = maxMembers,
         minMembers = minMembers,
         isNeedMemberConfirmation = isNeedMemberConfirmation ?: false,
@@ -73,13 +76,13 @@ fun OutStudyEventPostRequest.toDomain(organizer: EntityRef<Long, User>): OutStud
 
 fun OutStudyEvent.toApi(): OutStudyEventGetResponse {
     return OutStudyEventGetResponse(
-        id = 0,
+        id = id,
         name = name,
         address = address,
         description = description,
-        dateStart = dateStart.toString(),
-        dateEnd = dateEnd.toString(),
-        dateRegistrationEnd = dateRegistrationEnd?.toString(),
+        dateStart = dateStart.toString(DateFormat.FORMAT1),
+        dateEnd = dateEnd.toString(DateFormat.FORMAT1),
+        dateRegistrationEnd = dateRegistrationEnd?.toString(DateFormat.FORMAT1),
         maxMembers = maxMembers,
         minMembers = minMembers,
         isNeedMemberConfirmation = isNeedMemberConfirmation ?: false,
