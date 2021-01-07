@@ -25,7 +25,8 @@ data class OutStudyEvent(
     val isNeedMemberConfirmation: Boolean,
     val status: Status,
     val eventKind: EntityRef<Int, OutStudyEventKind>,
-    val organizer: EntityRef<Long, User>
+    val organizer: EntityRef<Long, User>,
+    val sizeMembers: Long
 ) : Event() {
 
     enum class Status(val id: Int) {
@@ -70,7 +71,8 @@ fun OutStudyEventPostRequest.toDomain(organizer: EntityRef<Long, User>): OutStud
         isNeedMemberConfirmation = isNeedMemberConfirmation ?: false,
         status = OutStudyEvent.Status.DRAFT,
         organizer = organizer,
-        eventKind = EntityRef(id = outstudyEventKindId)
+        eventKind = EntityRef(id = outstudyEventKindId),
+        sizeMembers = 0
     )
 }
 
@@ -92,3 +94,4 @@ fun OutStudyEvent.toApi(): OutStudyEventGetResponse {
         eventKindId = eventKind.id
     )
 }
+

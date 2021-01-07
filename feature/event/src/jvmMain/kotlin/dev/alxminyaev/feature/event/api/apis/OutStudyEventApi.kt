@@ -13,17 +13,25 @@ package dev.alxminyaev.feature.event.api.apis
 
 
 import com.alxminyaev.tool.domain.model.EntityRef
+import com.alxminyaev.tool.error.ValidationException
+import com.alxminyaev.tool.error.exceptions.PermissionException
 import com.alxminyaev.tool.error.exceptions.UnauthorizedException
+import com.alxminyaev.tool.error.exceptions.ValidationDataException
 import com.google.gson.Gson
 import dev.alxminyaev.feature.event.DataLimit
 import dev.alxminyaev.feature.event.api.Paths
 import dev.alxminyaev.feature.event.api.models.EntityLongCreatedResponse
 import dev.alxminyaev.feature.event.api.models.OutStudyEventListResponse
 import dev.alxminyaev.feature.event.api.models.OutStudyEventPostRequest
+import dev.alxminyaev.feature.event.api.models.RequestOutStudyEventApi
+import dev.alxminyaev.feature.event.model.outstudy.RequestOutStudyEvent
 import dev.alxminyaev.feature.event.model.toApi
 import dev.alxminyaev.feature.event.model.toDomain
+import dev.alxminyaev.feature.event.model.user.Role
 import dev.alxminyaev.feature.event.usecase.outstudy.CreateNewOutStudyEventUseCase
 import dev.alxminyaev.feature.event.usecase.outstudy.GetListOutStudyEventUseCase
+import dev.alxminyaev.feature.event.usecase.outstudy.PutRequestOutStudyEventUseCase
+import dev.alxminyaev.feature.event.usecase.outstudy.RegistrationUserOnOutStudyEvent
 import dev.alxminyaev.tool.webServer.utils.User
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -32,6 +40,7 @@ import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.kodein.di.factory
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
 
@@ -128,18 +137,10 @@ fun Route.OutStudyEventApi() {
     }
 
 
-    route("/api/v1/outstudy-event/{id}/user-confirm") {
-        post {
-            call.respond(HttpStatusCode.NotImplemented)
-
-        }
-    }
-
-
     route("/api/v1/outstudy-event") {
         post {
             val obj = call.receive<OutStudyEventPostRequest>()
-//            val user = call.principal<User>() ?: throw UnauthorizedException() TODO replace hardcode
+            val user = call.principal<User>() ?: throw UnauthorizedException()
             val useCase by di().instance<CreateNewOutStudyEventUseCase>()
             val eventId = useCase.invoke(obj.toDomain(organizer = EntityRef(2)))
             call.respond(EntityLongCreatedResponse(eventId))
@@ -149,8 +150,11 @@ fun Route.OutStudyEventApi() {
 
     route("/api/v1/outstudy-event/{id}/registration") {
         post {
-            call.respond(HttpStatusCode.NotImplemented)
-
+            val eventId = call.parameters["id"]!!.toLong()
+            val user = call.principal<User>() ?: throw  UnauthorizedException()
+            val useCase by di().instance<RegistrationUserOnOutStudyEvent>()
+            useCase.invoke(eventId = eventId, userId = user.id)
+            call.respond(HttpStatusCode.OK)
         }
     }
 
@@ -162,4 +166,25 @@ fun Route.OutStudyEventApi() {
         }
     }
 
+    route("/api/v1/outstudy-event/{eventId}/request/{requestId}") {
+        put {
+            val parameters = call.parameters
+            val eventId =
+                parameters["eventId"]?.toLongOrNull() ?: throw ValidationDataException(message = "eventId must be long")
+            val requestId = parameters["requestId"]?.toLongOrNull()
+                ?: throw ValidationDataException(message = "requestId must be long")
+            val user = call.principal<User>() ?: throw UnauthorizedException()
+            if (user.rolesId.find { it == Role.OUT_STUDY_ORGANIZER.id } == null) {
+                throw PermissionException("Нужны права организатора")
+            }
+            val useCase by di().instance<PutRequestOutStudyEventUseCase>()
+            val body = call.receive<RequestOutStudyEventApi>()
+            useCase.invoke(
+                eventId = eventId,
+                requestId = requestId,
+                status = RequestOutStudyEvent.Status.getById(body.status)
+            )
+            call.respond(HttpStatusCode.OK)
+        }
+    }
 }
