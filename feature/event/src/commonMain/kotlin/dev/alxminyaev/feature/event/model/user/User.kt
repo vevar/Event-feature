@@ -6,10 +6,13 @@ data class User(
     val id: Long,
     val profile: Profile,
     val roles: List<Role>
-)
+) {
+    val isAdmin get() = roles.contains(Role.ADMIN)
+}
 
-fun User.toApi()= UserApiEntity(
+fun User.toApi() = UserApiEntity(
     id = id,
-    profile= profile.toApi(),
+    profile = profile.toApi(),
     roles = roles.map { it.id }.toTypedArray()
 )
+

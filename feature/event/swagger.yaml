@@ -123,7 +123,7 @@ paths:
         - "OutStudyEvent"
       summary: "Get outstudy-event by id (Not implemented, LOW Priority)"
       description: ""
-      operationId: "getByOutStudyEventId"
+      operationId: "getMembersOfOutStudyEventById"
       parameters:
         - name: id
           in: path
@@ -138,7 +138,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OutStudyEventGetResponseWithMembers"
+                $ref: "#/components/schemas/OutStudyEventGetResponse"
         "404":
           description: "Not found"
     delete:
@@ -204,12 +204,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-
+  /api/v1/outstudy-event/{id}/members:
+    get:
+      tags:
+        - "OutStudyEvent"
+      summary: "Get members of outstudy-event by id"
+      description: ""
+      operationId: "getByOutStudyEventId"
+      parameters:
+        - name: id
+          in: path
+          description: ID of object to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MembersOfOutStudyEvent"
+        "404":
+          description: "Not found"
   /api/v1/outstudy-event/{id}/registration:
     post:
       tags:
         - "OutStudyEvent"
-      summary: "User registration in outstudy-event (Not implemented, HIGH Priority)"
+      summary: "User registration in outstudy-event"
       description: ""
       operationId: "postRegistrationByOutStudyEventId"
       parameters:
@@ -272,7 +295,7 @@ paths:
     put:
       tags:
         - "OutStudyEvent"
-      summary: "Change request in outstudy-event (Not implemented, HIGH Priority)"
+      summary: "Change request in outstudy-event "
       description: ""
       operationId: "postConfirmationByOutStudyEventId"
       parameters:
@@ -440,6 +463,16 @@ components:
           format: int32
         isNeedMemberConfirmation:
           type: boolean
+    MembersOfOutStudyEvent:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserApiEntity"
 
 
     OutStudyEventGetResponse:
@@ -665,8 +698,6 @@ components:
       properties:
         user:
           $ref: '#/components/schemas/UserApiEntity'
-        isConfirmed:
-          type: "boolean"
 
     UserApiEntity:
       type: object

@@ -4,6 +4,7 @@ import com.alxminyaev.tool.domain.model.EntityRef
 import com.alxminyaev.tool.error.exceptions.NotFoundException
 import com.alxminyaev.tool.error.exceptions.PermissionException
 import dev.alxminyaev.feature.event.model.outstudy.RequestOutStudyEvent
+import dev.alxminyaev.feature.event.model.user.Role
 import dev.alxminyaev.feature.event.repository.MembersOutStudyEventRepository
 import dev.alxminyaev.feature.event.repository.OutStudyEventRepository
 import dev.alxminyaev.feature.event.repository.RequestOutStudyEventRepository
@@ -18,8 +19,12 @@ class RegistrationUserOnOutStudyEvent(
 
     suspend fun invoke(eventId: Long, userId: Long) {
         val user = userRepository.findById(userId) ?: throw NotFoundException("Пользователь с id=${userId} не найден")
+        if (!user.roles.contains(Role.OUT_STUDY_MEMBER)) {
+            throw PermissionException("У вас нет прав участника для внеучебных мероприятий")
+        }
         val outStudyEvent =
             outStudyEventRepository.findById(eventId) ?: throw  NotFoundException("Событие с id=${eventId} не найдено")
+
         if (outStudyEvent.maxMembers != null && outStudyEvent.sizeMembers >= outStudyEvent.maxMembers) {
             throw PermissionException("На событие не могут зарегестрироваться больше, чем ${outStudyEvent.maxMembers} участников")
         }

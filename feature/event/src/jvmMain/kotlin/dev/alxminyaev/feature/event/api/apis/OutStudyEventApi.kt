@@ -13,25 +13,18 @@ package dev.alxminyaev.feature.event.api.apis
 
 
 import com.alxminyaev.tool.domain.model.EntityRef
-import com.alxminyaev.tool.error.ValidationException
 import com.alxminyaev.tool.error.exceptions.PermissionException
 import com.alxminyaev.tool.error.exceptions.UnauthorizedException
 import com.alxminyaev.tool.error.exceptions.ValidationDataException
 import com.google.gson.Gson
 import dev.alxminyaev.feature.event.DataLimit
 import dev.alxminyaev.feature.event.api.Paths
-import dev.alxminyaev.feature.event.api.models.EntityLongCreatedResponse
-import dev.alxminyaev.feature.event.api.models.OutStudyEventListResponse
-import dev.alxminyaev.feature.event.api.models.OutStudyEventPostRequest
-import dev.alxminyaev.feature.event.api.models.RequestOutStudyEventApi
+import dev.alxminyaev.feature.event.api.models.*
 import dev.alxminyaev.feature.event.model.outstudy.RequestOutStudyEvent
 import dev.alxminyaev.feature.event.model.toApi
 import dev.alxminyaev.feature.event.model.toDomain
 import dev.alxminyaev.feature.event.model.user.Role
-import dev.alxminyaev.feature.event.usecase.outstudy.CreateNewOutStudyEventUseCase
-import dev.alxminyaev.feature.event.usecase.outstudy.GetListOutStudyEventUseCase
-import dev.alxminyaev.feature.event.usecase.outstudy.PutRequestOutStudyEventUseCase
-import dev.alxminyaev.feature.event.usecase.outstudy.RegistrationUserOnOutStudyEvent
+import dev.alxminyaev.feature.event.usecase.outstudy.*
 import dev.alxminyaev.tool.webServer.utils.User
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -40,7 +33,6 @@ import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import org.kodein.di.factory
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
 
@@ -48,11 +40,6 @@ import org.kodein.di.ktor.di
 fun Route.OutStudyEventApi() {
     val gson = Gson()
     val empty = mutableMapOf<String, Any?>()
-
-    delete<Paths.deleteConfirmationByOutStudyEventId> { _: Paths.deleteConfirmationByOutStudyEventId ->
-        call.respond(HttpStatusCode.NotImplemented)
-
-    }
 
 
     delete<Paths.deleteEventByOutStudyEventId> { _: Paths.deleteEventByOutStudyEventId ->
@@ -70,29 +57,6 @@ fun Route.OutStudyEventApi() {
     get<Paths.getByOutStudyEventId> { _: Paths.getByOutStudyEventId ->
         val exampleContentType = "application/json"
         val exampleContentString = """{
-          "members" : [ {
-            "isConfirmed" : true,
-            "user" : {
-              "roles" : [ 7, 7 ],
-              "profile" : {
-                "firstName" : "firstName",
-                "lastName" : "lastName",
-                "middleName" : "middleName"
-              },
-              "id" : 2
-            }
-          }, {
-            "isConfirmed" : true,
-            "user" : {
-              "roles" : [ 7, 7 ],
-              "profile" : {
-                "firstName" : "firstName",
-                "lastName" : "lastName",
-                "middleName" : "middleName"
-              },
-              "id" : 2
-            }
-          } ],
           "event" : {
             "dateRegistrationEnd" : "2000-01-23T04:56:07.000+00:00",
             "isNeedMemberConfirmation" : true,
@@ -127,6 +91,13 @@ fun Route.OutStudyEventApi() {
             else -> call.respondText(exampleContentString)
         }
 
+    }
+
+    get<Paths.getMembersOfOutStudyEventById> { param: Paths.getMembersOfOutStudyEventById ->
+        val user = call.principal<User>() ?: throw UnauthorizedException()
+        val getMemberUC by di().instance<GetMemberOfOutStudyEventUseCase>()
+        val members = getMemberUC.invoke(forUserId = user.id, outStudyEventId = param.id)
+        call.respond(members)
     }
 
 
