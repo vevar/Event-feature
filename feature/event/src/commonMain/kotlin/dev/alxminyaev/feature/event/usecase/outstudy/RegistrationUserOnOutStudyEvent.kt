@@ -24,7 +24,6 @@ class RegistrationUserOnOutStudyEvent(
         }
         val outStudyEvent =
             outStudyEventRepository.findById(eventId) ?: throw  NotFoundException("Событие с id=${eventId} не найдено")
-
         if (outStudyEvent.maxMembers != null && outStudyEvent.sizeMembers >= outStudyEvent.maxMembers) {
             throw PermissionException("На событие не могут зарегестрироваться больше, чем ${outStudyEvent.maxMembers} участников")
         }

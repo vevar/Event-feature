@@ -27,6 +27,9 @@ class CreateNewOutStudyEventUseCase(
             throw ValidationDataException("address", "Место провидение должно быть задано")
         }
 
+        if (outStudyEvent.dateStart.utc <= outStudyEvent.dateEnd.utc) {
+            throw ValidationDataException("dateEnd", "Дата окончания должна быть позже, чем дата начала")
+        }
         val eventKind = eventKindRepository.findById(outStudyEvent.eventKind.id)
             ?: throw ValidationDataException(message = "Тип события не найден")
         val organizer = userRepository.findById(outStudyEvent.organizer.id)
