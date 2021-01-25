@@ -21,6 +21,7 @@ import dev.alxminyaev.feature.event.model.toDomain
 import dev.alxminyaev.feature.event.usecase.eventkind.CreateEventKindUseCase
 import dev.alxminyaev.feature.event.usecase.eventkind.GetEventKindListUseCase
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.locations.*
 import io.ktor.request.*
@@ -46,14 +47,16 @@ fun Route.OutStudyEventKindApi() {
         call.respond(list.map { it.toApi() })
     }
 
-
-    route("/api/v1/outstudy-eventkind") {
-        post {
-            val body = call.receive<OutStudyEventKindPostRequest>()
-            val useCase by di().instance<CreateEventKindUseCase>()
-            val id = useCase.invoke(name = body.name, criteria = body.criteria?.map { it.toDomain() })
-            call.respond(EntityIntCreatedResponse(id))
+    authenticate {
+        route("/api/v1/outstudy-eventkind") {
+            post {
+                val body = call.receive<OutStudyEventKindPostRequest>()
+                val useCase by di().instance<CreateEventKindUseCase>()
+                val id = useCase.invoke(name = body.name, criteria = body.criteria?.map { it.toDomain() })
+                call.respond(EntityIntCreatedResponse(id))
+            }
         }
+
     }
 
 }

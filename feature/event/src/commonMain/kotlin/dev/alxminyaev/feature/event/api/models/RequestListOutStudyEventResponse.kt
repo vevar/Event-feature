@@ -11,13 +11,13 @@
 */
 package dev.alxminyaev.feature.event.api.models
 
-import dev.alxminyaev.feature.event.api.models.UserApiEntity
+import dev.alxminyaev.feature.event.api.models.RequestOutStudyResponse
 
 /**
  * 
- * @param user 
+ * @param data 
  */
-data class MemberResponse (
-    val user: UserApiEntity
+data class RequestListOutStudyEventResponse (
+    val data: kotlin.Array<RequestOutStudyResponse>
 ) 
 

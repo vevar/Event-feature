@@ -8,6 +8,8 @@ interface RequestOutStudyEventRepository {
 
     suspend fun findByEventAndUser(eventId: Long, userId: Long): RequestOutStudyEvent?
 
+    suspend fun findAllByEventId(eventId: Long): List<RequestOutStudyEvent>
+
     suspend fun save(request: RequestOutStudyEvent): Long
 
     suspend fun update(request: RequestOutStudyEvent)

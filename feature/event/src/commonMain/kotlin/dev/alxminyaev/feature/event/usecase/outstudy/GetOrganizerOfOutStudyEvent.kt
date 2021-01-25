@@ -10,13 +10,14 @@ class GetOrganizerOfOutStudyEventUseCase(
     private val userRepository: UserRepository
 ) {
 
-    suspend fun invoke(outStudyEventId: Long): User {
+    suspend fun invoke(outStudyEventId: Long): List<User> {
         val outStudyEvent =
             outStudyEventRepository.findById(outStudyEventId) ?: throw NotFoundException("Мероприятие не найдено")
 
-        val organizer = outStudyEvent.organizer
-        return organizer.entity ?: userRepository.findById(organizer.id)
-        ?: throw NotFoundException("Организатор не найден")
+        val organizers = outStudyEvent.organizer
+        return organizers.map {
+            it.entity ?: userRepository.findById(it.id) ?: throw NotFoundException("Организатор не найден")
+        }
     }
 
 }
@@ -25,6 +26,6 @@ class IsOrganizerOfOutStudyEventUseCase(
     private val getOrganizerOfOutStudyEventUseCase: GetOrganizerOfOutStudyEventUseCase
 ) {
     suspend fun invoke(userId: Long, outStudyEventId: Long): Boolean {
-        return getOrganizerOfOutStudyEventUseCase.invoke(outStudyEventId).id == userId
+        return getOrganizerOfOutStudyEventUseCase.invoke(outStudyEventId).find { it.id == userId } != null
     }
 }

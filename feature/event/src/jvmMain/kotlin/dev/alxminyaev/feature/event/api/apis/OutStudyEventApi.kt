@@ -26,6 +26,7 @@ import dev.alxminyaev.feature.event.model.toDomain
 import dev.alxminyaev.feature.event.model.user.Role
 import dev.alxminyaev.feature.event.usecase.outstudy.*
 import dev.alxminyaev.tool.webServer.utils.User
+import dev.alxminyaev.tool.webServer.utils.user
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -53,51 +54,23 @@ fun Route.OutStudyEventApi() {
 
     }
 
-
-    get<Paths.getByOutStudyEventId> { _: Paths.getByOutStudyEventId ->
-        val exampleContentType = "application/json"
-        val exampleContentString = """{
-          "event" : {
-            "dateRegistrationEnd" : "2000-01-23T04:56:07.000+00:00",
-            "isNeedMemberConfirmation" : true,
-            "address" : "address",
-            "description" : "description",
-            "dateEnd" : "2000-01-23T04:56:07.000+00:00",
-            "maxMembers" : 1,
-            "dateStart" : "2000-01-23T04:56:07.000+00:00",
-            "organizer" : {
-              "user" : {
-                "roles" : [ 7, 7 ],
-                "profile" : {
-                  "firstName" : "firstName",
-                  "lastName" : "lastName",
-                  "middleName" : "middleName"
-                },
-                "id" : 2
-              }
-            },
-            "name" : "name",
-            "minMembers" : 5,
-            "isConfirmed" : true,
-            "id" : 0,
-            "outstudyEventKind" : 6,
-            "status" : 5
-          }
-        }"""
-
-        when (exampleContentType) {
-            "application/json" -> call.respond(gson.fromJson(exampleContentString, empty::class.java))
-            "application/xml" -> call.respondText(exampleContentString, ContentType.Text.Xml)
-            else -> call.respondText(exampleContentString)
+    authenticate {
+        get<Paths.getByOutStudyEventId> { param: Paths.getByOutStudyEventId ->
+            val user = call.principal<User>() ?: throw UnauthorizedException()
+            val getMemberUC by di().instance<GetMemberOfOutStudyEventUseCase>()
+            val members = getMemberUC.invoke(forUserId = user.id, outStudyEventId = param.id)
+            call.respond(members)
         }
 
     }
 
-    get<Paths.getMembersOfOutStudyEventById> { param: Paths.getMembersOfOutStudyEventById ->
-        val user = call.principal<User>() ?: throw UnauthorizedException()
-        val getMemberUC by di().instance<GetMemberOfOutStudyEventUseCase>()
-        val members = getMemberUC.invoke(forUserId = user.id, outStudyEventId = param.id)
-        call.respond(members)
+    authenticate {
+        get<Paths.getMembersOfOutStudyEventById> { param: Paths.getMembersOfOutStudyEventById ->
+            val user = call.principal<User>() ?: throw UnauthorizedException()
+            val getMemberUC by di().instance<GetMemberOfOutStudyEventUseCase>()
+            val members = getMemberUC.invoke(forUserId = user.id, outStudyEventId = param.id)
+            call.respond(members)
+        }
     }
 
 
@@ -108,24 +81,29 @@ fun Route.OutStudyEventApi() {
     }
 
 
-    route("/api/v1/outstudy-event") {
-        post {
-            val obj = call.receive<OutStudyEventPostRequest>()
-            val user = call.principal<User>() ?: throw UnauthorizedException()
-            val useCase by di().instance<CreateNewOutStudyEventUseCase>()
-            val eventId = useCase.invoke(obj.toDomain(organizer = EntityRef(2)))
-            call.respond(EntityLongCreatedResponse(eventId))
+    authenticate {
+        route("/api/v1/outstudy-event") {
+            post {
+                val obj = call.receive<OutStudyEventPostRequest>()
+                val user = call.principal<User>() ?: throw UnauthorizedException()
+                val useCase by di().instance<CreateNewOutStudyEventUseCase>()
+                val eventId = useCase.invoke(obj.toDomain(organizers = listOf(EntityRef(user.id))))
+                call.respond(EntityLongCreatedResponse(eventId))
+            }
         }
+
     }
 
+    authenticate {
+        route("/api/v1/outstudy-event/{id}/registration") {
+            post {
+                val eventId = call.parameters["id"]!!.toLong()
+                val user = call.user ?: throw  UnauthorizedException()
+                val useCase by di().instance<RegistrationUserOnOutStudyEvent>()
+                useCase.invoke(eventId = eventId, userId = user.id)
+                call.respond(HttpStatusCode.OK)
+            }
 
-    route("/api/v1/outstudy-event/{id}/registration") {
-        post {
-            val eventId = call.parameters["id"]!!.toLong()
-            val user = call.principal<User>() ?: throw  UnauthorizedException()
-            val useCase by di().instance<RegistrationUserOnOutStudyEvent>()
-            useCase.invoke(eventId = eventId, userId = user.id)
-            call.respond(HttpStatusCode.OK)
         }
     }
 
@@ -137,25 +115,5 @@ fun Route.OutStudyEventApi() {
         }
     }
 
-    route("/api/v1/outstudy-event/{eventId}/request/{requestId}") {
-        put {
-            val parameters = call.parameters
-            val eventId =
-                parameters["eventId"]?.toLongOrNull() ?: throw ValidationDataException(message = "eventId must be long")
-            val requestId = parameters["requestId"]?.toLongOrNull()
-                ?: throw ValidationDataException(message = "requestId must be long")
-            val user = call.principal<User>() ?: throw UnauthorizedException()
-            if (user.rolesId.find { it == Role.OUT_STUDY_ORGANIZER.id } == null) {
-                throw PermissionException("Нужны права организатора")
-            }
-            val useCase by di().instance<PutRequestOutStudyEventUseCase>()
-            val body = call.receive<RequestOutStudyEventApi>()
-            useCase.invoke(
-                eventId = eventId,
-                requestId = requestId,
-                status = RequestOutStudyEvent.Status.getById(body.status)
-            )
-            call.respond(HttpStatusCode.OK)
-        }
-    }
+
 }

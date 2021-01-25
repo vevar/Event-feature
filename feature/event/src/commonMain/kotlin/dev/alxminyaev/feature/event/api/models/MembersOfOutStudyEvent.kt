@@ -15,9 +15,11 @@ import dev.alxminyaev.feature.event.api.models.UserApiEntity
 
 /**
  * 
- * @param user 
+ * @param size 
+ * @param data 
  */
-data class MemberResponse (
-    val user: UserApiEntity
+data class MembersOfOutStudyEvent (
+    val size: kotlin.Long? = null,
+    val data: kotlin.Array<UserApiEntity>? = null
 ) 
 

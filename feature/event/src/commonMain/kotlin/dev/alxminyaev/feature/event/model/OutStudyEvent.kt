@@ -25,7 +25,7 @@ data class OutStudyEvent(
     val isNeedMemberConfirmation: Boolean,
     val status: Status,
     val eventKind: EntityRef<Int, OutStudyEventKind>,
-    val organizer: EntityRef<Long, User>,
+    val organizer: List<EntityRef<Long, User>>,
     val sizeMembers: Long
 ) : Event() {
 
@@ -56,7 +56,7 @@ data class OutStudyEvent(
     }
 }
 
-fun OutStudyEventPostRequest.toDomain(organizer: EntityRef<Long, User>): OutStudyEvent {
+fun OutStudyEventPostRequest.toDomain(organizers: List<EntityRef<Long, User>>): OutStudyEvent {
     val dateFormatter = DateFormat.invoke("yyyy-MM-dd'T'HH:mm")
     return OutStudyEvent(
         id = 0,
@@ -70,7 +70,7 @@ fun OutStudyEventPostRequest.toDomain(organizer: EntityRef<Long, User>): OutStud
         minMembers = minMembers,
         isNeedMemberConfirmation = isNeedMemberConfirmation ?: false,
         status = OutStudyEvent.Status.DRAFT,
-        organizer = organizer,
+        organizer = organizers,
         eventKind = EntityRef(id = outstudyEventKindId),
         sizeMembers = 0
     )
@@ -89,8 +89,10 @@ fun OutStudyEvent.toApi(): OutStudyEventGetResponse {
         minMembers = minMembers,
         isNeedMemberConfirmation = isNeedMemberConfirmation ?: false,
         status = status.id,
-        organizer = organizer.entity?.let { OrganizerResponse(it.toApi()) }
-            ?: throw IllegalStateException("organizer must be set"),
+        organizer = organizer.map {
+            it.entity?.let { OrganizerResponse(it.toApi()) }
+                ?: throw IllegalStateException("organizer must be set")
+        }.first(),
         eventKindId = eventKind.id
     )
 }

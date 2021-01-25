@@ -8,7 +8,6 @@ import dev.alxminyaev.feature.event.model.user.Role
 import dev.alxminyaev.feature.event.repository.OutStudyEventKindRepository
 import dev.alxminyaev.feature.event.repository.OutStudyEventRepository
 import dev.alxminyaev.feature.event.repository.UserRepository
-import kotlinx.datetime.LocalDateTime
 
 class CreateNewOutStudyEventUseCase(
     private val outStudyEventRepository: OutStudyEventRepository,
@@ -32,16 +31,20 @@ class CreateNewOutStudyEventUseCase(
         }
         val eventKind = eventKindRepository.findById(outStudyEvent.eventKind.id)
             ?: throw ValidationDataException(message = "Тип события не найден")
-        val organizer = userRepository.findById(outStudyEvent.organizer.id)
-            ?: throw ValidationDataException("Организатор не найден")
-        if (!organizer.roles.contains(Role.OUT_STUDY_ORGANIZER)) {
-            throw PermissionException("Для создания мероприятия нужны права организатора")
+        val organizers = userRepository.findByIds(outStudyEvent.organizer.map { it.id })
+        if (organizers.isEmpty()) {
+            throw ValidationDataException(message = "Список организаторов не может быть пустым")
+        }
+        organizers.forEach {
+            if (!it.roles.contains(Role.OUT_STUDY_ORGANIZER)) {
+                throw PermissionException("У пользователя с id=${it.id} нет прав организатора")
+            }
         }
 
         return outStudyEventRepository.save(
             outStudyEvent.copy(
                 eventKind = EntityRef(eventKind.id, eventKind),
-                organizer = EntityRef(organizer.id, organizer)
+                organizer = organizers.map { EntityRef(it.id, it) }
             )
         )
     }

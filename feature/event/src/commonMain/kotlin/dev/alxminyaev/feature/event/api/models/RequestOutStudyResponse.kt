@@ -15,9 +15,16 @@ import dev.alxminyaev.feature.event.api.models.UserApiEntity
 
 /**
  * 
+ * @param id 
+ * @param status 1: IN_PROCESS, 2: ACCEPT, 3: REJECT
  * @param user 
+ * @param outStudyEventId 
  */
-data class MemberResponse (
-    val user: UserApiEntity
+data class RequestOutStudyResponse (
+    val id: kotlin.Long,
+    /* 1: IN_PROCESS, 2: ACCEPT, 3: REJECT */
+    val status: kotlin.Int,
+    val user: UserApiEntity,
+    val outStudyEventId: kotlin.Long? = null
 ) 
 
