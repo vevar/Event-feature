@@ -13,17 +13,13 @@ package dev.alxminyaev.feature.event.api.apis
 
 
 import com.alxminyaev.tool.domain.model.EntityRef
-import com.alxminyaev.tool.error.exceptions.PermissionException
 import com.alxminyaev.tool.error.exceptions.UnauthorizedException
-import com.alxminyaev.tool.error.exceptions.ValidationDataException
 import com.google.gson.Gson
 import dev.alxminyaev.feature.event.DataLimit
 import dev.alxminyaev.feature.event.api.Paths
 import dev.alxminyaev.feature.event.api.models.*
-import dev.alxminyaev.feature.event.model.outstudy.RequestOutStudyEvent
 import dev.alxminyaev.feature.event.model.toApi
 import dev.alxminyaev.feature.event.model.toDomain
-import dev.alxminyaev.feature.event.model.user.Role
 import dev.alxminyaev.feature.event.usecase.outstudy.*
 import dev.alxminyaev.tool.webServer.utils.User
 import dev.alxminyaev.tool.webServer.utils.user
@@ -43,23 +39,28 @@ fun Route.OutStudyEventApi() {
     val empty = mutableMapOf<String, Any?>()
 
 
-    delete<Paths.deleteEventByOutStudyEventId> { _: Paths.deleteEventByOutStudyEventId ->
-        call.respond(HttpStatusCode.NotImplemented)
-
+    authenticate {
+        delete<Paths.deleteEventByOutStudyEventId> { param: Paths.deleteEventByOutStudyEventId ->
+            val useCase by di().instance<DeleteOutStudyEventUseCase>()
+            useCase.invoke(param.id)
+            call.respond(HttpStatusCode.OK)
+        }
     }
 
-
-    delete<Paths.deleteRegistrationByOutStudyEventId> { _: Paths.deleteRegistrationByOutStudyEventId ->
-        call.respond(HttpStatusCode.NotImplemented)
-
+    authenticate {
+        delete<Paths.deleteRegistrationByOutStudyEventId> { param: Paths.deleteRegistrationByOutStudyEventId ->
+            val useCase by di().instance<CancelRegistrationOnOutStudyUseCase>()
+            useCase.invoke(eventId = param.id, userId = call.user.id)
+            call.respond(HttpStatusCode.OK)
+        }
     }
 
     authenticate {
         get<Paths.getByOutStudyEventId> { param: Paths.getByOutStudyEventId ->
             val user = call.principal<User>() ?: throw UnauthorizedException()
-            val getMemberUC by di().instance<GetMemberOfOutStudyEventUseCase>()
-            val members = getMemberUC.invoke(forUserId = user.id, outStudyEventId = param.id)
-            call.respond(members)
+            val getOutStudyEventUC by di().instance<GetOutStudyEventByIdUseCase>()
+            val outStudyEvent = getOutStudyEventUC.invoke(eventId = param.id)
+            call.respond(outStudyEvent)
         }
 
     }
@@ -68,7 +69,11 @@ fun Route.OutStudyEventApi() {
         get<Paths.getMembersOfOutStudyEventById> { param: Paths.getMembersOfOutStudyEventById ->
             val user = call.principal<User>() ?: throw UnauthorizedException()
             val getMemberUC by di().instance<GetMemberOfOutStudyEventUseCase>()
-            val members = getMemberUC.invoke(forUserId = user.id, outStudyEventId = param.id)
+            val members = getMemberUC.invoke(
+                forUserId = user.id,
+                outStudyEventId = param.id,
+                dataLimit = DataLimit(offset = param.offset, size = param.limit)
+            )
             call.respond(members)
         }
     }
@@ -115,5 +120,19 @@ fun Route.OutStudyEventApi() {
         }
     }
 
+    authenticate {
+        route("/api/v1/outstudy-event/{eventId}/reward") {
+            post {
+                val eventId = call.parameters["eventId"]!!.toLong()
+                val useCase by di().instance<RewardMembersInOutStudyEventUseCase>()
+                val body = call.receive<RewardsListCriterionUsersRequest>()
+                useCase.invoke(
+                    eventId = eventId,
+                    criteriaUsers = mapOf(*(body.data.map { it.criterionId to it.usersIds.toList() }.toTypedArray()))
+                )
+                call.respond(HttpStatusCode.OK)
+            }
+        }
+    }
 
 }

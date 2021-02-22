@@ -19,6 +19,7 @@ import dev.alxminyaev.feature.event.api.models.OutStudyEventKindPostRequest
 import dev.alxminyaev.feature.event.model.toApi
 import dev.alxminyaev.feature.event.model.toDomain
 import dev.alxminyaev.feature.event.usecase.eventkind.CreateEventKindUseCase
+import dev.alxminyaev.feature.event.usecase.eventkind.DeleteEventKindUseCase
 import dev.alxminyaev.feature.event.usecase.eventkind.GetEventKindListUseCase
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -35,9 +36,10 @@ fun Route.OutStudyEventKindApi() {
     val gson = Gson()
     val empty = mutableMapOf<String, Any?>()
 
-    delete<Paths.deleteByOutStudyEventKindId> { _: Paths.deleteByOutStudyEventKindId ->
-        call.respond(HttpStatusCode.NotImplemented)
-
+    delete<Paths.deleteByOutStudyEventKindId> { param: Paths.deleteByOutStudyEventKindId ->
+        val useCase by di().instance<DeleteEventKindUseCase>()
+        useCase.invoke(param.id)
+        call.respond(HttpStatusCode.OK)
     }
 
 

@@ -4,5 +4,7 @@ import dev.alxminyaev.feature.event.model.CriterionOutStudy
 
 interface CriterionOutStudyRepository {
 
+    suspend fun findById(id: Long): CriterionOutStudy?
+
     suspend fun save(entities: List<CriterionOutStudy>): List<CriterionOutStudy>
 }

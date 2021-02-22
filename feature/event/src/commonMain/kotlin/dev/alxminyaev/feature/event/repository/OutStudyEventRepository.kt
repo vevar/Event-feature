@@ -12,4 +12,6 @@ interface OutStudyEventRepository {
 
     suspend fun save(outStudyEvent: OutStudyEvent): Long
 
+    suspend fun delete(id: Long)
+
 }

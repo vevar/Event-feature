@@ -32,23 +32,25 @@ object Paths {
     @Location("/api/v1/outstudy-event/{id}/registration") class deleteRegistrationByOutStudyEventId(val id: kotlin.Long)
 
     /**
-     * Get members of outstudy-event by id (Not implemented, LOW Priority)
-     * 
-     * @param id ID of object to return 
-     */
-    @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-event/{id}/members") class getByOutStudyEventId(val id: kotlin.Long)
-
-    /**
      * Get outstudy-event by id (Not implemented, LOW Priority)
      * 
      * @param id ID of object to return 
      */
     @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-event/{id}") class getMembersOfOutStudyEventById(val id: kotlin.Long)
+    @Location("/api/v1/outstudy-event/{id}") class getByOutStudyEventId(val id: kotlin.Long)
 
     /**
-     * Get list of  outstudy-events 
+     * Get members of outstudy-event by id (Получить список участников внеучебного мероприятия)
+     * 
+     * @param id ID of object to return 
+     * @param offset The number of items to skip before starting to collect the result set 
+     * @param limit The numbers of items to return 
+     */
+    @KtorExperimentalLocationsAPI
+    @Location("/api/v1/outstudy-event/{id}/members") class getMembersOfOutStudyEventById(val id: kotlin.Long, val offset: kotlin.Long, val limit: kotlin.Int)
+
+    /**
+     * Get list of outstudy-events (Получить список внеучебных мероприятий)
      * 
      * @param offset The number of items to skip before starting to collect the result set 
      * @param limit The numbers of items to return 
@@ -66,7 +68,7 @@ object Paths {
      * @param id ID of outstudy-event 
      */
     @KtorExperimentalLocationsAPI
-    @Location("/api/v1/outstudy-eventkind/{id}") class deleteByOutStudyEventKindId(val id: kotlin.Long)
+    @Location("/api/v1/outstudy-eventkind/{id}") class deleteByOutStudyEventKindId(val id: kotlin.Int)
 
     /**
      * Get list of OutStudyEventKinds
@@ -74,5 +76,13 @@ object Paths {
      */
     @KtorExperimentalLocationsAPI
     @Location("/api/v1/outstudy-eventkind") class getOutStudyEventKinds()
+
+    /**
+     * Получить список заявок на участие в мероприятие
+     * 
+     * @param eventId ID of outstudy-event 
+     */
+    @KtorExperimentalLocationsAPI
+    @Location("/api/v1/outstudy-event/{eventId}/request") class getRequestsOutStudyEvents(val eventId: kotlin.Long)
 
 }

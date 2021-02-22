@@ -40,6 +40,7 @@ data class OutStudyEvent(
         NOT_READY(7);
 
         companion object {
+
             fun getById(id: Int): Status {
                 return when (id) {
                     DRAFT.id -> DRAFT

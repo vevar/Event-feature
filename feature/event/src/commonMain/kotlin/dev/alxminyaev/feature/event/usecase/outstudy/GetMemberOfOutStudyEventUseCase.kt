@@ -2,6 +2,7 @@ package dev.alxminyaev.feature.event.usecase.outstudy
 
 import com.alxminyaev.tool.error.exceptions.NotFoundException
 import com.alxminyaev.tool.error.exceptions.PermissionException
+import dev.alxminyaev.feature.event.DataLimit
 import dev.alxminyaev.feature.event.PaginationList
 import dev.alxminyaev.feature.event.model.user.User
 import dev.alxminyaev.feature.event.repository.MembersOutStudyEventRepository
@@ -16,7 +17,7 @@ class GetMemberOfOutStudyEventUseCase(
     private val userRepository: UserRepository
 ) {
 
-    suspend fun invoke(forUserId: Long, outStudyEventId: Long): PaginationList<User> {
+    suspend fun invoke(forUserId: Long, outStudyEventId: Long, dataLimit: DataLimit): PaginationList<User> {
         val user = userRepository.findById(forUserId) ?: throw NotFoundException("Пользователь не найден")
 
         if (user.isAdmin && !isOrganizerUC.invoke(userId = user.id, outStudyEventId = outStudyEventId)) {
@@ -24,7 +25,8 @@ class GetMemberOfOutStudyEventUseCase(
         }
 
         return withContext(Dispatchers.Default) {
-            val membersByEventId = async { membersOutStudyEventRepository.getMembersByEventId(outStudyEventId) }
+            val membersByEventId =
+                async { membersOutStudyEventRepository.findByOutStudyEventId(outStudyEventId, dataLimit) }
             val size = async { membersOutStudyEventRepository.sizeBy(outStudyEventId) }
             PaginationList(
                 size = size.await(),

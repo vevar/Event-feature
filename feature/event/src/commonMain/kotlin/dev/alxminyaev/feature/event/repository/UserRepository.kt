@@ -7,4 +7,6 @@ interface UserRepository {
     suspend fun findById(id: Long): User?
 
     suspend fun findByIds(ids: List<Long>): List<User>
+
+
 }

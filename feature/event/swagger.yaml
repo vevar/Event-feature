@@ -38,7 +38,7 @@ paths:
     post:
       tags:
         - "OutStudyEvent"
-      summary: "Create outstudy-event "
+      summary: "Create outstudy-event (Создать внеучебное мероприятие) "
       description: ""
       operationId: "postOutStudyEvent"
       requestBody:
@@ -74,7 +74,7 @@ paths:
     get:
       tags:
         - "OutStudyEvent"
-      summary: "Get list of  outstudy-events "
+      summary: "Get list of outstudy-events (Получить список внеучебных мероприятий)"
       description: ""
       operationId: "getOutStudyEvents"
       parameters:
@@ -126,9 +126,9 @@ paths:
     get:
       tags:
         - "OutStudyEvent"
-      summary: "Get outstudy-event by id (Not implemented, LOW Priority)"
+      summary: "Get outstudy-event by id (Получить внеучебное мероприятие по id)"
       description: ""
-      operationId: "getMembersOfOutStudyEventById"
+      operationId: "getByOutStudyEventId"
       parameters:
         - name: id
           in: path
@@ -149,7 +149,7 @@ paths:
     delete:
       tags:
         - "OutStudyEvent"
-      summary: "Get outstudy-event by id (Not implemented, MEDIUM Priority)"
+      summary: "delete outstudy-event by id (удалить внеучебное мероприятие по id)"
       description: ""
       operationId: "deleteEventByOutStudyEventId"
       parameters:
@@ -213,9 +213,9 @@ paths:
     get:
       tags:
         - "OutStudyEvent"
-      summary: "Get members of outstudy-event by id"
+      summary: "Get members of outstudy-event by id (Получить список участников внеучебного мероприятия)"
       description: ""
-      operationId: "getByOutStudyEventId"
+      operationId: "getMembersOfOutStudyEventById"
       parameters:
         - name: id
           in: path
@@ -224,6 +224,20 @@ paths:
           schema:
             type: integer
             format: int64
+        - in: query
+          required: true
+          name: offset
+          schema:
+            type: integer
+            format: int64
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+            format: int32
+          description: The numbers of items to return
       responses:
         '200':
           description: OK
@@ -237,7 +251,7 @@ paths:
     post:
       tags:
         - "OutStudyEvent"
-      summary: "User registration in outstudy-event"
+      summary: "User registration in outstudy-event (Зарегистрировать на внеучебном мероприятии)"
       description: ""
       operationId: "postRegistrationByOutStudyEventId"
       parameters:
@@ -268,7 +282,7 @@ paths:
     delete:
       tags:
         - "OutStudyEvent"
-      summary: "Deleting of user registration in outstudy-event (Not implemented, HIGH Priority)"
+      summary: "Deleting of user registration in outstudy-event (Удалить регистрацию на мероприятии)"
       description: ""
       operationId: "deleteRegistrationByOutStudyEventId"
       parameters:
@@ -297,10 +311,46 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/v1/outstudy-event/{eventId}/reward:
+    post:
+      tags:
+        - "OutStudyEvent"
+      summary: "Наградить пользователей по критериям"
+      operationId: postOutStudyEventIdReward
+      parameters:
+        - name: eventId
+          in: path
+          description: ID of outstudy-event
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardsListCriterionUsersRequest'
+      responses:
+        '200':
+          description: OK
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/v1/outstudy-event/{eventId}/request:
     get:
       tags:
         - "RequestOutStudyEvent"
+      summary: "Получить список заявок на участие в мероприятие"
       operationId: getRequestsOutStudyEvents
       parameters:
         - name: eventId
@@ -333,7 +383,7 @@ paths:
     put:
       tags:
         - "RequestOutStudyEvent"
-      summary: "Change request in outstudy-event "
+      summary: "Change request in outstudy-event (Изменить статус запроса на участие)"
       description: ""
       operationId: "postConfirmationByOutStudyEventId"
       parameters:
@@ -426,7 +476,7 @@ paths:
     delete:
       tags:
         - "OutStudyEventKind"
-      summary: "OutStudyEvent kind by id (Not implemented, MEDIUM Priority)"
+      summary: "OutStudyEvent kind by id (удалить вид мероприятия по id)"
       description: ""
       operationId: "deleteByOutStudyEventKindId"
       parameters:
@@ -436,7 +486,7 @@ paths:
           required: true
           schema:
             type: integer
-            format: int64
+            format: int32
       responses:
         '200':
           description: OK
@@ -512,6 +562,30 @@ components:
           items:
             $ref: "#/components/schemas/UserApiEntity"
 
+    RewardCriterionUsersRequest:
+      type: object
+      required:
+        - criterionId
+        - usersIds
+      properties:
+        criterionId:
+          type: integer
+          format: int64
+        usersIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+
+    RewardsListCriterionUsersRequest:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/RewardCriterionUsersRequest"
 
     OutStudyEventGetResponse:
       type: object
