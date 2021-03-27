@@ -1,15 +1,11 @@
 package dev.alxminyaev.feature.event.api.apis
 
-import com.alxminyaev.tool.error.exceptions.PermissionException
-import com.alxminyaev.tool.error.exceptions.UnauthorizedException
 import com.alxminyaev.tool.error.exceptions.ValidationDataException
 import dev.alxminyaev.feature.event.api.models.RequestOutStudyEventApi
 import dev.alxminyaev.feature.event.model.outstudy.RequestOutStudyEvent
 import dev.alxminyaev.feature.event.model.outstudy.toRequestListOutStudyEventResponse
-import dev.alxminyaev.feature.event.model.user.Role
 import dev.alxminyaev.feature.event.usecase.outstudy.GetRequestsListByOutStudyEventUseCase
 import dev.alxminyaev.feature.event.usecase.outstudy.PutRequestOutStudyEventUseCase
-import dev.alxminyaev.tool.webServer.utils.User
 import dev.alxminyaev.tool.webServer.utils.user
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -29,7 +25,7 @@ fun Route.RequestOutStudyEventApi() {
                     message = "eventId must be long"
                 )
                 val useCase by di().instance<GetRequestsListByOutStudyEventUseCase>()
-                val user = call.user ?: throw UnauthorizedException()
+                val user = call.user
                 val list = useCase.invoke(eventId = eventId, userId = user.id)
                 call.respond(list.toRequestListOutStudyEventResponse())
             }
@@ -49,7 +45,7 @@ fun Route.RequestOutStudyEventApi() {
                 val useCase by di().instance<PutRequestOutStudyEventUseCase>()
                 val body = call.receive<RequestOutStudyEventApi>()
                 useCase.invoke(
-                    userId = call.user?.id ?: throw UnauthorizedException(),
+                    userId = call.user.id,
                     eventId = eventId,
                     requestId = requestId,
                     status = RequestOutStudyEvent.Status.getById(body.status)

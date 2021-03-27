@@ -3,17 +3,17 @@ package dev.alxminyaev.feature.event.usecase.outstudy
 import com.alxminyaev.tool.domain.model.EntityRef
 import com.alxminyaev.tool.error.exceptions.NotFoundException
 import com.alxminyaev.tool.error.exceptions.PermissionException
+import dev.alxminyaev.feature.event.model.OutStudyEvent
 import dev.alxminyaev.feature.event.model.outstudy.RequestOutStudyEvent
 import dev.alxminyaev.feature.event.model.user.Role
-import dev.alxminyaev.feature.event.repository.MembersOutStudyEventRepository
-import dev.alxminyaev.feature.event.repository.OutStudyEventRepository
-import dev.alxminyaev.feature.event.repository.RequestOutStudyEventRepository
-import dev.alxminyaev.feature.event.repository.UserRepository
+import dev.alxminyaev.feature.event.model.user.User
+import dev.alxminyaev.feature.event.repository.*
 
 class RegistrationUserOnOutStudyEvent(
     private val userRepository: UserRepository,
     private val outStudyEventRepository: OutStudyEventRepository,
     private val membersOutStudyEventRepository: MembersOutStudyEventRepository,
+    private val chatRepository: ChatRepository,
     private val requestOutStudyEventRepository: RequestOutStudyEventRepository
 ) {
 
@@ -32,7 +32,7 @@ class RegistrationUserOnOutStudyEvent(
             if (memberRequest != null) {
                 when (memberRequest.status) {
                     RequestOutStudyEvent.Status.ACCEPT -> {
-                        membersOutStudyEventRepository.addMember(outStudyEvent, user)
+                        addUserToEvent(outStudyEvent, user)
                         return
                     }
                     RequestOutStudyEvent.Status.IN_PROCESS -> {
@@ -53,8 +53,13 @@ class RegistrationUserOnOutStudyEvent(
                 requestOutStudyEventRepository.save(newRequest)
             }
         } else {
-            membersOutStudyEventRepository.addMember(outStudyEvent, user)
+            addUserToEvent(outStudyEvent,user)
         }
     }
 
+
+    private suspend fun addUserToEvent(outStudyEvent: OutStudyEvent, user: User) {
+        membersOutStudyEventRepository.addMember(outStudyEvent, user)
+        chatRepository.addUserToChat(outStudyEvent.chat,user)
+    }
 }

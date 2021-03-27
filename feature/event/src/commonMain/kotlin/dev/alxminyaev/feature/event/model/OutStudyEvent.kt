@@ -5,9 +5,11 @@ import com.soywiz.klock.DateFormat
 import com.soywiz.klock.DateTime
 import com.soywiz.klock.DateTimeTz
 import com.soywiz.klock.parse
+import dev.alxminyaev.feature.event.api.models.ChatResponse
 import dev.alxminyaev.feature.event.api.models.OrganizerResponse
 import dev.alxminyaev.feature.event.api.models.OutStudyEventGetResponse
 import dev.alxminyaev.feature.event.api.models.OutStudyEventPostRequest
+import dev.alxminyaev.feature.event.model.chat.Chat
 import dev.alxminyaev.feature.event.model.user.User
 import dev.alxminyaev.feature.event.model.user.toApi
 import kotlinx.datetime.LocalDateTime
@@ -19,6 +21,7 @@ data class OutStudyEvent(
     override val description: String?,
     override val dateStart: DateTimeTz,
     override val dateEnd: DateTimeTz,
+    val chat: Chat,
     val dateRegistrationEnd: DateTimeTz?,
     val maxMembers: Int?,
     val minMembers: Int?,
@@ -58,7 +61,7 @@ data class OutStudyEvent(
 }
 
 fun OutStudyEventPostRequest.toDomain(organizers: List<EntityRef<Long, User>>): OutStudyEvent {
-    val dateFormatter = DateFormat.invoke("yyyy-MM-dd'T'HH:mm")
+    val dateFormatter = DateFormat.invoke("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     return OutStudyEvent(
         id = 0,
         name = name,
@@ -73,7 +76,11 @@ fun OutStudyEventPostRequest.toDomain(organizers: List<EntityRef<Long, User>>): 
         status = OutStudyEvent.Status.DRAFT,
         organizer = organizers,
         eventKind = EntityRef(id = outstudyEventKindId),
-        sizeMembers = 0
+        sizeMembers = 0,
+        chat = Chat(
+            id = 0,
+            name = "Чат мероприятия $name"
+        )
     )
 }
 
@@ -94,7 +101,12 @@ fun OutStudyEvent.toApi(): OutStudyEventGetResponse {
             it.entity?.let { OrganizerResponse(it.toApi()) }
                 ?: throw IllegalStateException("organizer must be set")
         }.first(),
-        eventKindId = eventKind.id
+        eventKindId = eventKind.id,
+        chat = ChatResponse(
+            id = chat.id,
+            name = chat.name,
+            type = chat.type
+        )
     )
 }
 

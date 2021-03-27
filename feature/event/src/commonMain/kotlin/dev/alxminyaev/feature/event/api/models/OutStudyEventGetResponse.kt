@@ -11,6 +11,7 @@
 */
 package dev.alxminyaev.feature.event.api.models
 
+import dev.alxminyaev.feature.event.api.models.ChatResponse
 import dev.alxminyaev.feature.event.api.models.OrganizerResponse
 
 /**
@@ -23,6 +24,7 @@ import dev.alxminyaev.feature.event.api.models.OrganizerResponse
  * @param status 
  * @param isNeedMemberConfirmation 
  * @param organizer 
+ * @param chat 
  * @param description 
  * @param dateRegistrationEnd UTC
  * @param eventKindId 
@@ -41,6 +43,7 @@ data class OutStudyEventGetResponse (
     val status: kotlin.Int,
     val isNeedMemberConfirmation: kotlin.Boolean,
     val organizer: OrganizerResponse,
+    val chat: ChatResponse,
     val description: kotlin.String? = null,
     /* UTC */
     val dateRegistrationEnd: kotlin.String? = null,

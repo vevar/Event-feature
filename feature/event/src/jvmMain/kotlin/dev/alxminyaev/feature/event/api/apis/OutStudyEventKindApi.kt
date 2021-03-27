@@ -36,10 +36,12 @@ fun Route.OutStudyEventKindApi() {
     val gson = Gson()
     val empty = mutableMapOf<String, Any?>()
 
-    delete<Paths.deleteByOutStudyEventKindId> { param: Paths.deleteByOutStudyEventKindId ->
-        val useCase by di().instance<DeleteEventKindUseCase>()
-        useCase.invoke(param.id)
-        call.respond(HttpStatusCode.OK)
+    authenticate {
+        delete<Paths.deleteByOutStudyEventKindId> { param: Paths.deleteByOutStudyEventKindId ->
+            val useCase by di().instance<DeleteEventKindUseCase>()
+            useCase.invoke(param.id)
+            call.respond(HttpStatusCode.OK)
+        }
     }
 
 

@@ -60,7 +60,7 @@ fun Route.OutStudyEventApi() {
             val user = call.principal<User>() ?: throw UnauthorizedException()
             val getOutStudyEventUC by di().instance<GetOutStudyEventByIdUseCase>()
             val outStudyEvent = getOutStudyEventUC.invoke(eventId = param.id)
-            call.respond(outStudyEvent)
+            call.respond(outStudyEvent.toApi())
         }
 
     }

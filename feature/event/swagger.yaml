@@ -599,6 +599,7 @@ components:
         - organizer
         - dateStart
         - dateEnd
+        - chat
       properties:
         id:
           type: integer
@@ -639,6 +640,8 @@ components:
           type: boolean
         organizer:
           $ref: "#/components/schemas/OrganizerResponse"
+        chat:
+          $ref: "#/components/schemas/ChatResponse"
 
     OutStudyEventGetResponseWithMembers:
       type: object
@@ -870,7 +873,21 @@ components:
           type: "string"
         middleName:
           type: "string"
-
+    ChatResponse:
+      type: object
+      required:
+        - id
+        - name
+        - type
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        type:
+          type: integer
+          format: int32
 
 externalDocs:
   description: "Find out more about Swagger"
