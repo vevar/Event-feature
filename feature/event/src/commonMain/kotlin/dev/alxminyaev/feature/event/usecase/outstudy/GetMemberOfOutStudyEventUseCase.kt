@@ -20,7 +20,7 @@ class GetMemberOfOutStudyEventUseCase(
     suspend fun invoke(forUserId: Long, outStudyEventId: Long, dataLimit: DataLimit): PaginationList<User> {
         val user = userRepository.findById(forUserId) ?: throw NotFoundException("Пользователь не найден")
 
-        if (user.isAdmin && !isOrganizerUC.invoke(userId = user.id, outStudyEventId = outStudyEventId)) {
+        if (!user.isAdmin && !isOrganizerUC.invoke(userId = user.id, outStudyEventId = outStudyEventId)) {
             throw PermissionException("Вы не являетесь организатором данного мероприятия")
         }
 
