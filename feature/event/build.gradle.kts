@@ -76,7 +76,7 @@ kotlin {
 
 dependencies {
     mppSetup {
-        js = true
+//        js = true
         jvm = true
 
         mppLibrary(Deps.Multiplatform.kotlinStdlib)

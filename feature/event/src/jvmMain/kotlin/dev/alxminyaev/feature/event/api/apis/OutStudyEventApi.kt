@@ -13,13 +13,18 @@ package dev.alxminyaev.feature.event.api.apis
 
 
 import com.alxminyaev.tool.domain.model.EntityRef
+import com.alxminyaev.tool.domain.util.dateFormat
+import com.alxminyaev.tool.domain.util.toMppDateTime
 import com.alxminyaev.tool.error.exceptions.UnauthorizedException
 import com.google.gson.Gson
+import com.soywiz.klock.parse
 import dev.alxminyaev.feature.event.DataLimit
 import dev.alxminyaev.feature.event.api.Paths
 import dev.alxminyaev.feature.event.api.models.*
+import dev.alxminyaev.feature.event.model.OutStudyEvent
 import dev.alxminyaev.feature.event.model.toApi
 import dev.alxminyaev.feature.event.model.toDomain
+import dev.alxminyaev.feature.event.repository.OutStudyEventRepository
 import dev.alxminyaev.feature.event.usecase.outstudy.*
 import dev.alxminyaev.tool.webServer.utils.User
 import dev.alxminyaev.tool.webServer.utils.user
@@ -30,6 +35,7 @@ import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import kotlinx.coroutines.async
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
 
@@ -81,8 +87,34 @@ fun Route.OutStudyEventApi() {
 
     get<Paths.getOutStudyEvents> { param: Paths.getOutStudyEvents ->
         val useCase by di().instance<GetListOutStudyEventUseCase>()
-        val userList = useCase.invoke(DataLimit(offset = param.offset, size = param.limit))
-        call.respond(OutStudyEventListResponse(size = 9999, data = userList.map { it.toApi() }.toTypedArray()))
+        val sizeRequest by di().instance<OutStudyEventRepository>()
+        val dataLimit = DataLimit(offset = param.offset, size = param.limit)
+
+        val dateStart = param.dateStart?.let { dateFormat.parse(it) }
+        val dateEnd = param.dateEnd?.let { dateFormat.parse(it) }
+        val status = param.status?.let { OutStudyEvent.Status.getById(it) }
+
+        val data = async {
+            useCase.invoke(
+                dataLimit,
+                dateStart = dateStart,
+                dateEnd = dateEnd,
+                status = status,
+                organizerId = param.organizerId,
+                memberId = param.memberId
+            ).map { it.toApi() }
+        }
+        val totalDataSize = async {
+            sizeRequest.sizeBy(
+                dataLimit,
+                dateStart = dateStart,
+                dateEnd = dateEnd,
+                status = status,
+                organizerId = param.organizerId,
+                memberId = param.memberId
+            )
+        }
+        call.respond(OutStudyEventListResponse(size = totalDataSize.await(), data = data.await().toTypedArray()))
     }
 
 

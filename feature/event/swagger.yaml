@@ -113,7 +113,16 @@ paths:
           name: isConfirmed
           schema:
             type: "boolean"
-
+        - in: query
+          name: memberId
+          schema:
+            type: "integer"
+            format: "int64"
+        - in: query
+          name: organizerId
+          schema:
+            type: "integer"
+            format: "int64"
       responses:
         '200':
           description: OK

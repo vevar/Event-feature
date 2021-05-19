@@ -33,27 +33,20 @@ data class OutStudyEvent(
 ) : Event() {
 
     enum class Status(val id: Int) {
-        UNKNOWN(0),
-        DRAFT(1),
-        CONFIRMATION(2),
-        READY(3),
-        CANCELED(4),
-        IN_PROGRESS(5),
-        FINISHED(6),
-        NOT_READY(7);
+        NEW(10),
+        IN_PROGRESS(20),
+        FINISHED(30),
+        IN_ARCHIVE(40);
 
         companion object {
 
             fun getById(id: Int): Status {
                 return when (id) {
-                    DRAFT.id -> DRAFT
-                    CONFIRMATION.id -> CONFIRMATION
-                    READY.id -> READY
-                    CANCELED.id -> CANCELED
+                    NEW.id -> NEW
                     IN_PROGRESS.id -> IN_PROGRESS
                     FINISHED.id -> FINISHED
-                    NOT_READY.id -> NOT_READY
-                    else -> UNKNOWN
+                    IN_ARCHIVE.id -> IN_ARCHIVE
+                    else -> throw IllegalArgumentException()
                 }
             }
         }
@@ -73,7 +66,7 @@ fun OutStudyEventPostRequest.toDomain(organizers: List<EntityRef<Long, User>>): 
         maxMembers = maxMembers,
         minMembers = minMembers,
         isNeedMemberConfirmation = isNeedMemberConfirmation ?: false,
-        status = OutStudyEvent.Status.DRAFT,
+        status = OutStudyEvent.Status.NEW,
         organizer = organizers,
         eventKind = EntityRef(id = outstudyEventKindId),
         sizeMembers = 0,
