@@ -163,6 +163,8 @@ fun Route.OutStudyEventApi() {
                 val useCase by di().instance<ChangeStatusOutStudyEventUseCase>()
 
                 useCase.invoke(id, OutStudyEvent.Status.getById(body.status))
+
+                call.respond(HttpStatusCode.OK)
             }
         }
     }
