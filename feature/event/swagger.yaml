@@ -237,13 +237,8 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - status
-              properties:
-                status:
-                  type: integer
-                  format: int64
+              $ref: '#/components/schemas/ChangeStatusOfOutStudyEventRequest'
+
       responses:
         '200':
           description: OK
@@ -620,7 +615,14 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/UserApiEntity"
-
+    ChangeStatusOfOutStudyEventRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: integer
+          format: int32
     RewardCriterionUsersRequest:
       type: object
       required:

@@ -22,7 +22,6 @@ interface OutStudyEventRepository {
 
     suspend fun delete(id: Long)
 
-
     suspend fun sizeBy(
         dataLimit: DataLimit,
         dateStart: DateTimeTz?,
@@ -31,4 +30,6 @@ interface OutStudyEventRepository {
         organizerId: Long?,
         memberId: Long?
     ): Long
+
+    suspend fun updateStatus(id: Long, status: OutStudyEvent.Status)
 }

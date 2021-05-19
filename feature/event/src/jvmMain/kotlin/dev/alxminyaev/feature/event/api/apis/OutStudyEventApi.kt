@@ -16,6 +16,7 @@ import com.alxminyaev.tool.domain.model.EntityRef
 import com.alxminyaev.tool.domain.util.dateFormat
 import com.alxminyaev.tool.domain.util.toMppDateTime
 import com.alxminyaev.tool.error.exceptions.UnauthorizedException
+import com.alxminyaev.tool.error.exceptions.ValidationDataException
 import com.google.gson.Gson
 import com.soywiz.klock.parse
 import dev.alxminyaev.feature.event.DataLimit
@@ -144,13 +145,28 @@ fun Route.OutStudyEventApi() {
         }
     }
 
+    authenticate {
+        route("/api/v1/outstudy-event/{id}") {
+            put {
+                call.respond(HttpStatusCode.NotImplemented)
 
-    route("/api/v1/outstudy-event/{id}") {
-        put {
-            call.respond(HttpStatusCode.NotImplemented)
+            }
+        }
 
+    }
+
+    authenticate {
+        route("/api/v1/out-study-event/{id}/status") {
+            put {
+                val id = call.parameters["id"]?.toLongOrNull() ?: throw ValidationDataException()
+                val body = call.receive<ChangeStatusOfOutStudyEventRequest>()
+                val useCase by di().instance<ChangeStatusOutStudyEventUseCase>()
+
+                useCase.invoke(id, OutStudyEvent.Status.getById(body.status))
+            }
         }
     }
+
 
     authenticate {
         route("/api/v1/outstudy-event/{eventId}/reward") {
