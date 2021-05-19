@@ -218,6 +218,56 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/out-study-event/{id}/status:
+    put:
+      tags:
+        - "OutStudyEvent"
+      summary: "Update status of outstudy-event "
+      description: ""
+      operationId: "updateStatusByOutStudyEventId"
+      parameters:
+        - name: id
+          in: path
+          description: ID of object to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: integer
+                  format: int64
+      responses:
+        '200':
+          description: OK
+        "404":
+          description: "Not found"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/v1/outstudy-event/{id}/members:
     get:
       tags:
