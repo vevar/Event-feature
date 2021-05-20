@@ -31,6 +31,10 @@ tags:
     externalDocs:
       description: "Find out more"
       url: "shorturl.at/bjwU5"
+  - name: "TopBoard"
+    externalDocs:
+      description: "Find out more"
+      url: "shorturl.at/bjwU5"
 
 
 paths:
@@ -108,7 +112,7 @@ paths:
           name: status
           schema:
             type: "integer"
-            format: "int64"
+            format: "int32"
         - in: query
           name: isConfirmed
           schema:
@@ -559,8 +563,122 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/v1/outstudy-event/{eventId}/user-top-board:
+    get:
+      tags:
+        - "TopBoard"
+      summary: "Get user top board"
+      description: ""
+      operationId: "getUserTopBoardByEventId"
+      parameters:
+        - name: eventId
+          in: path
+          description: ID of object to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutStudyEventUserTopBoardResponse"
+        "404":
+          description: "Not found"
+    put:
+      tags:
+        - "TopBoard"
+      summary: "update user top board"
+      description: ""
+      operationId: "putUserTopBoardByEventId"
+      parameters:
+        - name: eventId
+          in: path
+          description: ID of object to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutOutStudyEventUserTopBoardRequest'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutStudyEventUserTopBoardResponse"
+        "404":
+          description: "Not found"
+
 components:
   schemas:
+    UserPlaceTopBoardResponse:
+      type: object
+      required:
+        - user
+        - place
+      properties:
+        user:
+          type: integer
+          format: int64
+        place:
+          type: integer
+          format: int64
+    OutStudyEventUserTopBoardResponse:
+      type: object
+      required:
+        - userPlace
+        - minBall
+        - maxBall
+      properties:
+        userPlace:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserPlaceTopBoardResponse'
+        minBall:
+          type: integer
+          format: int32
+        maxBall:
+          type: integer
+          format: int32
+
+    PutUserPlaceTopBoardRequest:
+      type: object
+      required:
+          - user
+          - place
+      properties:
+        user:
+          type: integer
+          format: int64
+        place:
+          type: integer
+          format: int64
+    PutOutStudyEventUserTopBoardRequest:
+      type: object
+      required:
+        - userPlace
+        - minBall
+        - maxBall
+      properties:
+        userPlace:
+          type: array
+          items:
+            $ref: '#/components/schemas/PutUserPlaceTopBoardRequest'
+        minBall:
+          type: integer
+          format: int32
+        maxBall:
+          type: integer
+          format: int32
+
     OutStudyEventPostRequest:
       type: object
       required:

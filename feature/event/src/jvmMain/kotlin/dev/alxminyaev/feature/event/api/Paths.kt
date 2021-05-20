@@ -16,7 +16,7 @@ import io.ktor.locations.Location
 
 object Paths {
     /**
-     * Get outstudy-event by id (Not implemented, MEDIUM Priority)
+     * delete outstudy-event by id (удалить внеучебное мероприятие по id)
      *
      * @param id ID of object to delete
      */
@@ -25,7 +25,7 @@ object Paths {
     class deleteEventByOutStudyEventId(val id: kotlin.Long)
 
     /**
-     * Deleting of user registration in outstudy-event (Not implemented, HIGH Priority)
+     * Deleting of user registration in outstudy-event (Удалить регистрацию на мероприятии)
      *
      * @param id ID of outstudy-event
      */
@@ -34,7 +34,7 @@ object Paths {
     class deleteRegistrationByOutStudyEventId(val id: kotlin.Long)
 
     /**
-     * Get outstudy-event by id (Not implemented, LOW Priority)
+     * Get outstudy-event by id (Получить внеучебное мероприятие по id)
      *
      * @param id ID of object to return
      */
@@ -62,6 +62,8 @@ object Paths {
      * @param dateEnd  (optional)
      * @param status  (optional)
      * @param isConfirmed  (optional)
+     * @param memberId  (optional)
+     * @param organizerId  (optional)
      */
     @KtorExperimentalLocationsAPI
     @Location("/api/v1/outstudy-event")
@@ -77,7 +79,7 @@ object Paths {
     )
 
     /**
-     * OutStudyEvent kind by id (Not implemented, MEDIUM Priority)
+     * OutStudyEvent kind by id (удалить вид мероприятия по id)
      *
      * @param id ID of outstudy-event
      */
@@ -101,5 +103,14 @@ object Paths {
     @KtorExperimentalLocationsAPI
     @Location("/api/v1/outstudy-event/{eventId}/request")
     class getRequestsOutStudyEvents(val eventId: kotlin.Long)
+
+    /**
+     * Get user top board
+     *
+     * @param eventId ID of object to return
+     */
+    @KtorExperimentalLocationsAPI
+    @Location("/api/v1/outstudy-event/{eventId}/user-top-board")
+    class getUserTopBoardByEventId(val eventId: kotlin.Long)
 
 }
